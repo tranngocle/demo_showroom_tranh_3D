@@ -1,0 +1,49 @@
+@font-face {
+    font-family: 'Roboto', sans-serif;
+    src: url('https://fonts.googleapis.com/css?family=Roboto');
+}
+
+.title {
+    text-align: center;
+    position: absolute;
+}
+
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+canvas {
+    height: 100%;
+    width: 100%;
+}
+
+.details-content {
+    /* width:300px;
+    height:500px; */
+    background-color: rgba(124, 124, 124, 0.815);
+    align-content: center;
+    position: fixed;
+    border-radius: 20px;
+    padding: 5px;
+    color: black;
+    top: -999999px;
+    right: -999999px;
+    transition: width 2s, height 4s, color 4s;
+    box-shadow: 5px 5px 3px 0px rgba(15, 15, 15, 0.1);
+}
+
+.view-picture {
+    /* width:300px;
+    height:500px; */
+    background-color: rgba(124, 124, 124, 0.815);
+    align-content: center;
+    position: fixed;
+    border-radius: 20px;
+    padding: 5px;
+    color: black;
+    top: -999999px;
+    left: -999999px;
+    transition: width 2s, height 4s, color 4s;
+    box-shadow: 5px 5px 3px 0px rgba(15, 15, 15, 0.1);
+}
