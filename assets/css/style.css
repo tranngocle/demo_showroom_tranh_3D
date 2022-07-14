@@ -21,7 +21,7 @@ canvas {
 .details-content {
     /* width:300px;
     height:500px; */
-    background-color: rgba(124, 124, 124, 0.815);
+    background-color: rgba(242, 122, 50, 0.815);
     align-content: center;
     position: fixed;
     border-radius: 20px;
@@ -29,14 +29,14 @@ canvas {
     color: black;
     top: -999999px;
     right: -999999px;
-    transition: width 2s, height 4s, color 4s;
+    /**transition: width 2s, height 4s, color 4s; **/
     box-shadow: 5px 5px 3px 0px rgba(15, 15, 15, 0.1);
 }
 
 .view-picture {
     /* width:300px;
     height:500px; */
-    background-color: rgba(124, 124, 124, 0.815);
+    background-color: rgba(242, 122, 50, 0.815);
     align-content: center;
     position: fixed;
     border-radius: 20px;
@@ -44,6 +44,6 @@ canvas {
     color: black;
     top: -999999px;
     left: -999999px;
-    transition: width 2s, height 4s, color 4s;
+    /** transition: width 2s, height 4s, color 4s; **/
     box-shadow: 5px 5px 3px 0px rgba(15, 15, 15, 0.1);
 }

@@ -4,6 +4,7 @@ import { StereoEffect } from '../src/examples/jsm/effects/StereoEffect.js';
 import { TrackballControls } from '../src/examples/jsm/controls/TrackballControls.js';
 import { RectAreaLightHelper } from '../src/examples/jsm/helpers/RectAreaLightHelper.js';
 import { RectAreaLightUniformsLib } from '../src/examples/jsm/lights/RectAreaLightUniformsLib.js';
+import { FontLoader } from '../src/examples/jsm/loaders/FontLoader.js';
 // import CameraControls from '../assets/js/dist/camera-controls.js';
 //import { TWEEN } from '../assets/js/dist/tween.umd.js';
 
@@ -28,7 +29,6 @@ let clothGeometry;
 let sphere;
 let object, effect;
 
-
 let radius = 0,
     phi, theta, lon, lat;
 
@@ -51,10 +51,16 @@ let mesh, mesh1, mesh2;
 let totalPic = 16; //
 let cameraRig, cameraPerspectiveHelper, cameraOrthoHelper;
 
+const fov = 45;
+const near = 1;
+const far = 15000;
+
+
 const clock = new THREE.Clock();
 
 const video = document.getElementById('video');
 video.volume = 0.000; // volumn video
+
 
 
 
@@ -70,7 +76,8 @@ function init() {
     // scene
 
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xcce0ff);
+    //scene.background = new THREE.Color(0xffffff);
+
     // scene.fog = new THREE.Fog( 0xcce0ff, 500, 10000 );
 
     //scene.fog = new THREE.Fog( 0xcce0ff, 500, 10000 ); // using
@@ -78,12 +85,17 @@ function init() {
     // camera
 
     // camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 0.5, 10000 );
-    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 20000);
+    camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
     //camera.position.set( 1000, 50, 1500 );//default
     // camera.position.set( 1000, 0, 2000 );
     // camera.fov=10;
 
-    camera.position.set(0, 200, 10000);
+    const loaderImg = new THREE.TextureLoader();
+    loaderImg.load('assets/images/sky2.jpg', function(texture) {
+        scene.background = texture;
+    });
+
+    camera.position.set(0, 250, 8000);
     cameraRig = new THREE.Group();
 
     cameraRig.add(camera);
@@ -93,14 +105,51 @@ function init() {
 
     scene.add(new THREE.AmbientLight(0x666666));
 
-    const light = new THREE.DirectionalLight(0xdfebff, 1);
-    light.position.set(50, 200, 100);
-    light.position.multiplyScalar(1.3);
+    const light = new THREE.SpotLight(0xf8f8ff, 0.5);
+    light.position.set(0, -200, 500);
+    light.position.multiplyScalar(5);
 
     light.castShadow = true;
 
-    light.shadow.mapSize.width = 1024;
-    light.shadow.mapSize.height = 1024;
+    light.shadow.mapSize.width = 124;
+    light.shadow.mapSize.height = 2024;
+
+    scene.add(light);
+
+    // const light2 = new THREE.DirectionalLight(0xdfebff, 0.5);
+    // light2.position.set(0, 0, -5000);
+    // light2.position.multiplyScalar(5);
+
+    // light2.castShadow = true;
+
+    // light2.shadow.mapSize.width = 1024;
+    // light2.shadow.mapSize.height = 1024;
+    // scene.add(light2);
+
+
+    const light3 = new THREE.SpotLight(0xdfebff, 0.5);
+    light3.position.set(5000, 0, 0);
+    light3.position.multiplyScalar(5);
+
+    light3.castShadow = true;
+
+    light3.shadow.mapSize.width = 1024;
+    light3.shadow.mapSize.height = 1024;
+
+    scene.add(light3);
+
+    // const light4 = new THREE.DirectionalLight(0xdfebff, 0.5);
+    // light4.position.set(-5000, 0, 0);
+    // light4.position.multiplyScalar(5);
+
+    // light4.castShadow = true;
+
+    // light4.shadow.mapSize.width = 1024;
+    // light4.shadow.mapSize.height = 1024;
+
+    // scene.add(light4);
+
+
 
     const d = 300;
 
@@ -109,23 +158,27 @@ function init() {
     light.shadow.camera.top = d;
     light.shadow.camera.bottom = -d;
 
-    light.shadow.camera.far = 1000;
+    light.shadow.camera.far = 500;
+    light.shadow.camera.near = 30;
 
-    scene.add(light);
+    scene.fog = new THREE.Fog(0xffffff, 5000, 19000);
+
+    //scene.fog = new THREE.FogExp2(0xffffff, 0.001);
+
 
     RectAreaLightUniformsLib.init();
 
     // const rectLight1 = new THREE.RectAreaLight( 0xff0000, 5, 1000, 900 );
-    // rectLight1.position.set(  500, 5, -200 );
+    // rectLight1.position.set(  500, 5, -2000 );
     // rectLight1.rotation.y = -300;
     // scene.add( rectLight1 );
     const rectLight1 = new THREE.RectAreaLight(0xff0000, 150, 1500, 100);
-    rectLight1.position.set(-4959, 1000, -5500);
+    rectLight1.position.set(-4959, 1000, -4000);
     rectLight1.rotation.y = -1000;
     rectLight1.rotation.x = 300;
     rectLight1.rotation.z = -300;
     // rectLight1.lookAt(0, 0, 0);
-    scene.add(rectLight1);
+    //scene.add(rectLight1);
 
     // const rectLight2 = new THREE.RectAreaLight( 0xff0000, 150, 1500, 100 );
     // rectLight2.position.set(  -1950, 600, -5000 );
@@ -143,45 +196,71 @@ function init() {
     // // rectLight1.lookAt(0, 0, 0);
     // scene.add( rectLight3 );
 
+    const rectLight3 = new THREE.RectAreaLight(0xFF6400, 150, 1500, 100);
+    rectLight3.position.set(1000, 900, -3000);
+    // rectLight7.rotation.y = 1000;
+    rectLight3.rotation.x = 300;
+    // rectLight7.rotation.z = 300;
+    // rectLight1.lookAt(0, 0, 0);
+    //scene.add(rectLight3);
+
     const rectLight4 = new THREE.RectAreaLight(0xff0000, 150, 1500, 100);
-    rectLight4.position.set(230, 600, -5000);
+    rectLight4.position.set(3050, 900, 500);
     rectLight4.rotation.y = -1000;
     rectLight4.rotation.x = 300;
     rectLight4.rotation.z = -300;
     // rectLight1.lookAt(0, 0, 0);
-    scene.add(rectLight4);
+    //scene.add(rectLight4);
 
     const rectLight5 = new THREE.RectAreaLight(0xFF9B00, 150, 1500, 100);
-    rectLight5.position.set(4900, 1000, -5000);
+    rectLight5.position.set(4900, 1000, -4000);
     rectLight5.rotation.y = 1000;
     rectLight5.rotation.x = 300;
     rectLight5.rotation.z = 300;
     // rectLight1.lookAt(0, 0, 0);
-    scene.add(rectLight5);
+    //scene.add(rectLight5);
 
     const rectLight6 = new THREE.RectAreaLight(0xFF9B00, 150, 1500, 100);
-    rectLight6.position.set(170, 600, -5000);
+    rectLight6.position.set(2950, 900, 500);
     rectLight6.rotation.y = 1000;
     rectLight6.rotation.x = 300;
     rectLight6.rotation.z = 300;
     // rectLight1.lookAt(0, 0, 0);
-    scene.add(rectLight6);
+    //scene.add(rectLight6);
 
     const rectLight7 = new THREE.RectAreaLight(0xFF6400, 150, 1500, 100);
-    rectLight7.position.set(0, 1000, -2100);
+    rectLight7.position.set(-500, 900, 4000);
     // rectLight7.rotation.y = 1000;
     rectLight7.rotation.x = 300;
     // rectLight7.rotation.z = 300;
     // rectLight1.lookAt(0, 0, 0);
-    scene.add(rectLight7);
+    //scene.add(rectLight7);
 
-    scene.add(new RectAreaLightHelper(rectLight1));
-    // scene.add( new RectAreaLightHelper( rectLight2 ) );
-    // scene.add( new RectAreaLightHelper( rectLight3 ) );
-    scene.add(new RectAreaLightHelper(rectLight4));
-    scene.add(new RectAreaLightHelper(rectLight5));
-    scene.add(new RectAreaLightHelper(rectLight6));
-    scene.add(new RectAreaLightHelper(rectLight7));
+    const rectLight8 = new THREE.RectAreaLight(0xFF6400, 150, 1500, 100);
+    rectLight8.position.set(-2250, 900, 500);
+    rectLight8.rotation.y = 1000;
+    rectLight8.rotation.x = 300;
+    rectLight8.rotation.z = 300;
+    // rectLight1.lookAt(0, 0, 0);
+    //scene.add(rectLight8);
+
+    const rectLight9 = new THREE.RectAreaLight(0xff0000, 150, 1500, 100);
+    rectLight9.position.set(-500, 900, 100);
+    // rectLight7.rotation.y = 1000;
+    rectLight9.rotation.x = 300;
+    // rectLight7.rotation.z = 300;
+    // rectLight1.lookAt(0, 0, 0);
+    //scene.add(rectLight9);
+
+    // scene.add(new RectAreaLightHelper(rectLight1));
+    // // scene.add( new RectAreaLightHelper( rectLight2 ) );
+    // scene.add(new RectAreaLightHelper(rectLight3));
+    // scene.add(new RectAreaLightHelper(rectLight4));
+    // scene.add(new RectAreaLightHelper(rectLight5));
+    // scene.add(new RectAreaLightHelper(rectLight6));
+    // scene.add(new RectAreaLightHelper(rectLight7));
+    // scene.add(new RectAreaLightHelper(rectLight8));
+    // scene.add(new RectAreaLightHelper(rectLight9));
 
 
     // ground
@@ -200,7 +279,7 @@ function init() {
     // scene.add(videoScreen);
 
     //const groundTexture = loader.load( '../src/examples/textures/terrain/grasslight-big.jpg' );
-    const groundTexture = loader.load('../assets/images/floor6.jpg');
+    const groundTexture = loader.load('../assets/images/woodground.jpg');
     // const groundTexture = loader.load( '../assets/images/woodground2.jpg' );
     groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
     groundTexture.repeat.set(45, 45);
@@ -257,7 +336,7 @@ function init() {
     // set skin
 
     const poleGeo = new THREE.BoxGeometry(5, 375, 5);
-    const poleMat = new THREE.MeshStandardMaterial();
+    const poleMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("245, 245, 245"), transparent: false });
     const wallMat = new THREE.MeshStandardMaterial();
     const frameMat = new THREE.MeshStandardMaterial({ color: new THREE.Color("rgb(36, 36, 36)"), transparent: false });
 
@@ -300,35 +379,12 @@ function init() {
     // ******* end pole
 
 
-
-
     //wall wellcome
-
-    const box_wellcome_bottom = new THREE.BoxGeometry(100, 30, 100);
-    mesh = new THREE.Mesh(box_wellcome_bottom, poleMat);
-    mesh.position.y = -250;
-    mesh.position.x = -500;
-    mesh.position.z = 7000;
-    mesh.receiveShadow = true;
-    mesh.castShadow = true;
-
-    scene.add(mesh);
-
-
-    const box_wellcome_middel = new THREE.BoxGeometry(30, 250, 30);
-    mesh = new THREE.Mesh(box_wellcome_middel, poleMat);
-    mesh.position.y = -220;
-    mesh.position.x = -500;
-    mesh.position.z = 7000;
-
-    scene.add(mesh);
-
-    const box_wellcome_top = new THREE.BoxGeometry(300, 300, 20);
+    const box_wellcome_top = new THREE.BoxGeometry(855, 665, 20);
     mesh = new THREE.Mesh(box_wellcome_top, poleMat);
     mesh.position.y = 50;
-    mesh.position.x = -500;
-    mesh.rotation.x = -500;
-    mesh.position.z = 7000;
+    mesh.position.x = -900;
+    mesh.position.z = 6000;
     mesh.receiveShadow = true;
     mesh.castShadow = true;
 
@@ -337,85 +393,7 @@ function init() {
 
     //wall custom new THREE.BoxGeometry( width x, height y, thickness z )
 
-
-    const floor_g_o = new THREE.BoxGeometry(10500, 50, 15000);
-    mesh = new THREE.Mesh(floor_g_o, poleMat);
-    mesh.position.y = 2300;
-    mesh.rotation.x = 0;
-    mesh.position.z = 0;
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-
-    scene.add(mesh);
-
-    // const floor_g_o_1 = new THREE.BoxGeometry(10000, 50, 5800);
-    // mesh = new THREE.Mesh(floor_g_o_1, poleMat);
-    // mesh.position.y = 2000;
-    // mesh.position.x = 0;
-    // mesh.position.z = -4650;
-    // mesh.castShadow = true;
-    // mesh.receiveShadow = true;
-
-    // scene.add(mesh);
-
-
-    //wall on floor
-    const floor_w_5 = new THREE.BoxGeometry(500, 5500, 300);
-    mesh = new THREE.Mesh(floor_w_5, poleMat);
-    mesh.position.y = 50;
-    mesh.position.x = -2500;
-    mesh.position.z = 2500;
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-
-    scene.add(mesh);
-
-
-
-    const floor_w_6 = new THREE.BoxGeometry(500, 5500, 300);
-    mesh = new THREE.Mesh(floor_w_6, poleMat);
-    mesh.position.y = 50;
-    mesh.position.x = 2500;
-    mesh.position.z = 2500;
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-
-    scene.add(mesh);
-
-    const floor_w_7 = new THREE.BoxGeometry(500, 5500, 300);
-    mesh = new THREE.Mesh(floor_w_7, poleMat);
-    mesh.position.y = 50;
-    mesh.position.x = -2500;
-    mesh.position.z = -400;
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-
-    scene.add(mesh);
-
-
-
-    const floor_w_8 = new THREE.BoxGeometry(500, 5500, 300);
-    mesh = new THREE.Mesh(floor_w_8, poleMat);
-    mesh.position.y = 50;
-    mesh.position.x = 2500;
-    mesh.position.z = -400;
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-
-    scene.add(mesh);
-
-    // wall horizontal gama
-    const wall1 = new THREE.BoxGeometry(2000, 3000, 40);
-    mesh = new THREE.Mesh(wall1, poleMat);
-    mesh.position.y = -250;
-    mesh.position.x = 0;
-    mesh.position.z = -2100;
-    mesh.receiveShadow = true;
-    mesh.castShadow = true;
-
-    scene.add(mesh);
-
-    const wallmaxleft = new THREE.BoxGeometry(40, 5000, 15000);
+    const wallmaxleft = new THREE.BoxGeometry(70, 5000, 12000);
     mesh = new THREE.Mesh(wallmaxleft, poleMat);
     mesh.position.y = -250;
     mesh.position.x = -5000;
@@ -426,7 +404,7 @@ function init() {
     scene.add(mesh);
 
 
-    const wallmaxright = new THREE.BoxGeometry(40, 5000, 15000);
+    const wallmaxright = new THREE.BoxGeometry(70, 5000, 12000);
     mesh = new THREE.Mesh(wallmaxright, poleMat);
     mesh.position.y = -250;
     mesh.position.x = 5000;
@@ -436,30 +414,17 @@ function init() {
 
     scene.add(mesh);
 
-    const wallmaxbottom = new THREE.BoxGeometry(10000, 5000, 40);
+    const wallmaxbottom = new THREE.BoxGeometry(7000, 5000, 70);
     mesh = new THREE.Mesh(wallmaxbottom, poleMat);
     mesh.position.y = -250;
     mesh.position.x = 0;
-    mesh.position.z = -7500;
+    mesh.position.z = -5500;
     mesh.receiveShadow = true;
     mesh.castShadow = true;
 
     scene.add(mesh);
 
-
-    const wallmaxtop = new THREE.BoxGeometry(10000, 700, 40);
-    mesh = new THREE.Mesh(wallmaxtop, poleMat);
-    mesh.position.y = 2100;
-    mesh.position.x = 0;
-    mesh.position.z = 7500;
-    mesh.receiveShadow = true;
-    mesh.castShadow = true;
-
-    scene.add(mesh);
-
-
-
-    const wall1left = new THREE.BoxGeometry(3200, 3000, 40);
+    const wall1left = new THREE.BoxGeometry(3200, 4000, 70);
     mesh = new THREE.Mesh(wall1left, poleMat);
     mesh.position.y = 750;
     mesh.position.x = -3495;
@@ -470,7 +435,7 @@ function init() {
     scene.add(mesh);
 
 
-    const wall1right = new THREE.BoxGeometry(3200, 3000, 40);
+    const wall1right = new THREE.BoxGeometry(3200, 4000, 70);
     mesh = new THREE.Mesh(wall1right, poleMat);
     mesh.position.y = 750;
     mesh.position.x = 3495;
@@ -482,43 +447,43 @@ function init() {
 
     //tuong gan tranh phia truoc
 
-    const wallpic1right = new THREE.BoxGeometry(1300, 1000, 30);
-    mesh = new THREE.Mesh(wallpic1right, poleMat);
-    mesh.position.y = 300;
-    mesh.position.x = 2500;
-    mesh.position.z = -200;
-    mesh.receiveShadow = true;
-    mesh.castShadow = true;
+    // const wallpic1right = new THREE.BoxGeometry(1000, 1500, 30);
+    // mesh = new THREE.Mesh(wallpic1right, poleMat);
+    // mesh.position.y = 250;
+    // mesh.position.x = 2200;
+    // mesh.position.z = 4000;
+    // mesh.receiveShadow = true;
+    // mesh.castShadow = true;
 
-    scene.add(mesh);
+    // scene.add(mesh);
 
 
-    const wallpic1left = new THREE.BoxGeometry(1300, 1000, 30);
+    const wallpic1left = new THREE.BoxGeometry(3500, 2000, 70);
     mesh = new THREE.Mesh(wallpic1left, poleMat);
-    mesh.position.y = 300;
-    mesh.position.x = -2500;
-    mesh.position.z = -200;
+    mesh.position.y = 250;
+    mesh.position.x = 900;
+    mesh.position.z = 3000;
     mesh.receiveShadow = true;
     mesh.castShadow = true;
 
     scene.add(mesh);
 
 
-    const wallpic1bet_ver1 = new THREE.BoxGeometry(50, 2000, 1500);
+    const wallpic1bet_ver1 = new THREE.BoxGeometry(3000, 2000, 70);
     mesh = new THREE.Mesh(wallpic1bet_ver1, poleMat);
-    mesh.position.y = -250;
-    mesh.position.x = 800;
-    mesh.position.z = 900;
+    mesh.position.y = 250;
+    mesh.position.x = -700;
+    mesh.position.z = -1250;
     mesh.receiveShadow = true;
     mesh.castShadow = true;
 
     scene.add(mesh);
 
-    const wallpic1bet_ver3 = new THREE.BoxGeometry(50, 2000, 1500);
+    const wallpic1bet_ver3 = new THREE.BoxGeometry(70, 2000, 3500);
     mesh = new THREE.Mesh(wallpic1bet_ver3, poleMat);
-    mesh.position.y = -250;
-    mesh.position.x = -700;
-    mesh.position.z = 900;
+    mesh.position.y = 250;
+    mesh.position.x = -2200;
+    mesh.position.z = 500;
     mesh.receiveShadow = true;
     mesh.castShadow = true;
 
@@ -527,35 +492,12 @@ function init() {
 
     //tuong gan tranh phia trong
 
-    const wallpic_ho_1 = new THREE.BoxGeometry(50, 2000, 2000);
+    const wallpic_ho_1 = new THREE.BoxGeometry(70, 2000, 4000);
     mesh = new THREE.Mesh(wallpic_ho_1, poleMat);
-    mesh.position.y = -250;
-    mesh.position.x = 200;
-    mesh.position.z = -5000;
+    mesh.position.y = 250;
+    mesh.position.x = 3000;
+    mesh.position.z = 0;
 
-    mesh.receiveShadow = true;
-    mesh.castShadow = true;
-
-    scene.add(mesh);
-
-
-
-    const wallpic_ho_2 = new THREE.BoxGeometry(50, 2000, 2000);
-    mesh = new THREE.Mesh(wallpic_ho_2, poleMat);
-    mesh.position.y = -250;
-    mesh.position.x = 2000;
-    mesh.position.z = -5000;
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-
-    scene.add(mesh);
-
-
-    const wallpic_ho_3 = new THREE.BoxGeometry(50, 2000, 2000);
-    mesh = new THREE.Mesh(wallpic_ho_3, poleMat);
-    mesh.position.y = -250;
-    mesh.position.x = -2000;
-    mesh.position.z = -5000;
     mesh.receiveShadow = true;
     mesh.castShadow = true;
 
@@ -564,7 +506,7 @@ function init() {
     //renderer
 
     renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setPixelRatio(window.devicePixelRatio) ? window.devicePixelRatio : 1;
     renderer.setSize(window.innerWidth, window.innerHeight);
 
     container.appendChild(renderer.domElement);
@@ -580,10 +522,19 @@ function init() {
     // move mouse
     controls = new OrbitControls(camera, renderer.domElement);
     controls.maxPolarAngle = Math.PI * 0.5;
+    controls.minPolarAngle = Math.PI * 0.5;
+
+    controls.target.set(0, 450, 8000);
     // controls.minDistance = 1000;
     // controls.maxDistance = 5000;
-    controls.minDistance = 1000;
+    controls.minDistance = 10;
     controls.maxDistance = 8000;
+    controls.keyPanSpeed = 800;
+
+    controls.mouseButtons.RIGHT = THREE.MOUSE.PAN;
+    // controls.mouseButtons.LEFT = THREE.MOUSE.PAN;
+    // controls.mouseButtons.MIDDLE = THREE.MOUSE.PAN;
+
     controls.listenToKeyEvents(window); // optional
 
     //controls.addEventListener( 'change', render ); // call this only in static scenes (i.e., if there is no animation loop)
@@ -591,6 +542,9 @@ function init() {
     controls.dampingFactor = 0.05;
     // controls.enablePan = true;
     controls.enableZoom = true;
+    //controls.rotateSpeed = 100;
+    controls.panSpeed = 100;
+
 
 
     //controls.screenSpacePanning = false;
@@ -625,38 +579,80 @@ function init() {
 
 
     // add pic to wall
-    addPicturesBigBackWall(totalPic);
+    //addPicturesBigBackWall(totalPic);
 
-    //addPicturesWallVer1(-2400);
+    addPictureBigWallMiddel1(0);
+    addPictureBigWallMiddel2(0);
+    addPictureBigWallMiddel3(0);
+    addPictureBigWallMiddel4(0);
+    addPictureBigWallMiddel5(0);
+    addPictureBigWallMiddel6(0);
+    addPictureBigWallMiddel7(0);
+    addPictureBigWallMiddel8(0);
 
-    addPicturesWallLeft(-2900);
-    addPicturesWallRight1(2900);
+    addPictureBigWallLeft1(-5000);
+    addPictureBigWallLeft2(-5000);
+    addPictureBigWallLeft3(-5000);
+    addPictureBigWallLeft4(-5000);
+    addPictureBigWallLeft5(-5000);
+    addPictureBigWallLeft6(-5000);
+    addPictureBigWallLeft7(-5000);
+    addPictureBigWallLeft8(-5000);
+    addPictureBigWallLeft9(-5000);
+    addPictureBigWallLeft10(-5000);
+    addPictureBigWallLeft11(-5000);
 
-    addPictureBigWallMiddel(4000);
 
-    addPictureBigWallLeft(-4950);
+    addPictureBigWallRight1(5000);
+    addPictureBigWallRight2(5000);
+    addPictureBigWallRight3(5000);
+    addPictureBigWallRight4(5000);
+    addPictureBigWallRight5(5000);
+    addPictureBigWallRight6(5000);
+    addPictureBigWallRight7(5000);
+    addPictureBigWallRight8(5000);
+    addPictureBigWallRight9(5000);
+    addPictureBigWallRight10(5000);
+    addPictureBigWallRight11(5000);
 
-    addPictureBigWallRight(4950);
+    addPicturesWallVer1(-200);
+    addPicturesWallVer2(400);
+    addPicturesWallVer3(1000);
+    addPicturesWallVer4(1700);
 
-    addPicturesWallVer1(-700);
+    addPicturesWallVer5(-2200);
+    addPicturesWallVer6(-2200);
+    addPicturesWallVer7(-2200);
 
-    addPicturesWallVer2(800);
+    addPictureWellcome(-900);
 
-    addPicturesWallVer3(-700);
 
-    addPicturesWallVer4(800);
+    addPicturesWallVer8(-1700);
+    addPicturesWallVer9(-1700);
+    addPicturesWallVer10(-1700);
+    addPicturesWallVer11(-1700);
 
-    addPicturesOppositeWallVer1(-2000);
+    addPicturesWallVer12(3000);
+    addPicturesWallVer13(3000);
 
-    addPicturesOppositeWallVer2(-2000);
+    addPicturesWallVer14(900);
+    addPicturesWallVer15(900);
+    addPicturesWallVer16(900);
 
-    addPicturesOppositeWallVer3(200);
+    addPicturesWallVer17(-2200);
+    addPicturesWallVer18(-2200);
+    addPicturesWallVer19(-2200);
+    addPicturesWallVer20(-2200);
+    addPicturesWallVer21(-2200);
 
-    addPicturesOppositeWallVer4(200);
+    addPicturesWallVer22(-700);
+    addPicturesWallVer23(-700);
+    addPicturesWallVer24(-700);
 
-    addPicturesOppositeWallVer5(2000);
-
-    addPicturesOppositeWallVer6(2000);
+    addPicturesWallVer25(3000);
+    addPicturesWallVer26(3000);
+    addPicturesWallVer27(3000);
+    addPicturesWallVer28(3000);
 }
 
 function onMouseMove(event) {
@@ -676,7 +672,7 @@ function onMouseClick(event) {
     // calculate mouse position in normalized device coordinates
     // (-1 to +1) for both components
     var timer1 = 5000;
-    var timer2 = 7000;
+    var timer2 = 5000;
     SCREEN_WIDTH = window.innerWidth;
     SCREEN_HEIGHT = window.innerHeight;
 
@@ -707,8 +703,8 @@ function onMouseClick(event) {
         //     //   cameraPositionY: event.clientY,
         //     cameraPositionZ: clientZ,
         // };
-        // console.log(position1);
-        // //console.log(event.clientz);
+        // // console.log(position1);
+        // // //console.log(event.clientz);
         // cameraToMarker(position1);
 
         /**/
@@ -783,87 +779,15 @@ function onMouseClick(event) {
 }
 
 
-function addPicturesBigBackWall(totalPic) { //max pic: 16
-    let frame_v_out_1, frame_ver_1, frame_v_out_2, frame_ver_2;
+function addPictureWellcome(positionX) {
+    let frame_v_out, frame_ver;
 
-    /*  position wall 1
-        mesh.position.y = - 250;
-        mesh.position.x = 0;
-        mesh.position.z = - 1500;
-    */
-    let posX = 0,
-        posY = 400,
-        posZ = -2050;
-    const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/fpt_1.png');
-    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
-    frameTexture.repeat.set(1, 1);
-    frameTexture.anisotropy = 16;
-    frameTexture.encoding = THREE.sRGBEncoding;
-
-    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
-    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
-
-    // for (var i = 1; i <= totalPic; i++) {
-    // frame
-    frame_v_out_1 = new THREE.BoxGeometry(1400, 1000, 5);
-    //console.log(poleMat);
-    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
-    mesh.position.x = posX; //+ (-172);
-    mesh.position.y = posY;
-    mesh.position.z = posZ;
-    mesh.receiveShadow = true;
-    mesh.castShadow = false;
-
-    scene.add(mesh);
-
-    // posZ = posZ + (170);
-
-    /*
-     frame_v_out = new THREE.BoxGeometry( 255, 155, 2 );
-    //console.log(poleMat);
-    mesh = new THREE.Mesh( frame_v_out, frameMat );
-    mesh.position.x = posX;
-    mesh.position.y = posY;        
-    mesh.position.z = posZ-5 ;
-    mesh.receiveShadow = true;
-    mesh.castShadow = false;
-    scene.add( mesh );*/
-
-    // image show
-    frame_ver_1 = new THREE.BoxGeometry(1000, 500, 2);
-    //console.log(poleMat);
-    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
-    mesh.position.x = posX;
-    mesh.position.y = 350;
-    mesh.position.z = posZ + 15;
-    mesh.receiveShadow = true;
-    mesh.castShadow = false;
-    mesh.name = "bigbackwall_1"; //+ i;
-    scene.add(mesh);
-
-
-    posX += (-300);
-
-    //}
-
-
-}
-
-
-function addPicturesWallLeft(positionX) { //max pic: 3
-    let frame_v_out1, frame_ver1, frame_v_out2, frame_ver2, frame_v_out3, frame_ver3;
-
-    /*  position wall ver 2
-        mesh.position.y = - 250;
-        mesh.position.x = 900;
-        mesh.position.z = -375;
-    */
     let posX = positionX,
-        posY = 500,
-        posZ = 100;
+        posY = 50,
+        posZ = 6000;
+
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/puppy2.jpg');
+    const frameTexture = loader.load('../assets/images/L.png');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -872,247 +796,37 @@ function addPicturesWallLeft(positionX) { //max pic: 3
     const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
     const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
 
-    // for (var i = 1; i <= 3; i++) {
-
     // frame
-    frame_v_out1 = new THREE.BoxGeometry(200, 155, 5);
+    frame_v_out = new THREE.BoxGeometry(855, 655, 2);
     //console.log(poleMat);
-    mesh = new THREE.Mesh(frame_v_out1, frameMat);
-    mesh.position.x = posX;
-    mesh.position.y = posY;
-    mesh.position.z = posZ - 280;
-    mesh.receiveShadow = true;
-    mesh.castShadow = false;
-
-    scene.add(mesh);
-    // image show
-    frame_ver1 = new THREE.BoxGeometry(400, 450, 2);
-    //console.log(poleMat);
-    mesh = new THREE.Mesh(frame_ver1, frameMaterial);
-    mesh.position.x = posX;
-    mesh.position.y = posY;
-    mesh.position.z = posZ - 260;
-    mesh.receiveShadow = true;
-    mesh.castShadow = false;
-    mesh.name = "PiVL1"; // + i;
-
-    scene.add(mesh);
-    posZ += (-300)
-        //}
-
-    //frame pic 2 ver 1 left
-    frame_v_out2 = new THREE.BoxGeometry(400, 300, 2);
-
-    mesh = new THREE.Mesh(frame_v_out2, frameMat);
-    mesh.position.x = posX + 700;
-    mesh.position.y = posY;
-    mesh.position.z = posZ + 20;
-    mesh.receiveShadow = true;
-    mesh.castShadow = false;
-
-    scene.add(mesh);
-    //image show pic 2 ver 1 left
-
-    frame_ver2 = new THREE.BoxGeometry(500, 400, 2);
-
-    mesh = new THREE.Mesh(frame_ver2, frameMaterial);
-    mesh.position.x = posX + 700;
-    mesh.position.y = posY;
-    mesh.position.z = posZ + 30;
-    mesh.name = "PiVL2";
-
-    scene.add(mesh);
-    posZ += (-300);
-
-
-    //frame pic 3 ver 1 left
-    frame_v_out3 = new THREE.BoxGeometry(400, 300, 2);
-
-    mesh = new THREE.Mesh(frame_v_out3, frameMat);
-    mesh.position.x = posX + 700;
-    mesh.position.y = posY - 450;
-    mesh.position.z = posZ + 330;
-    mesh.receiveShadow = true;
-    mesh.castShadow = false;
-
-    scene.add(mesh);
-    //image show pic 3 ver 1 left
-
-    frame_ver3 = new THREE.BoxGeometry(500, 400, 2);
-
-    mesh = new THREE.Mesh(frame_ver3, frameMaterial);
-    mesh.position.x = posX + 700;
-    mesh.position.y = posY - 450;
-    mesh.position.z = posZ + 350;
-    mesh.name = "PiVL3";
-
-    scene.add(mesh);
-    posZ += (-300);
-
-
-}
-
-function addPicturesWallRight1(positionX) {
-
-
-
-    let frame_v_out1, frame_ver1, frame_v_out2, frame_ver2, frame_v_out3, frame_ver3;
-
-    /*  position wall ver 2
-        mesh.position.y = - 250;
-        mesh.position.x = 900;
-        mesh.position.z = -375;
-    */
-    let posX = positionX,
-        posY = 500,
-        posZ = 100;
-    const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/puppy2.jpg');
-    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
-    frameTexture.repeat.set(1, 1);
-    frameTexture.anisotropy = 16;
-    frameTexture.encoding = THREE.sRGBEncoding;
-
-    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
-    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
-
-
-    // frame
-    frame_v_out1 = new THREE.BoxGeometry(200, 155, 5);
-    //console.log(poleMat);
-    mesh = new THREE.Mesh(frame_v_out1, frameMat);
-    mesh.position.x = posX;
-    mesh.position.y = posY;
-    mesh.position.z = posZ - 280;
-    mesh.receiveShadow = true;
-    mesh.castShadow = false;
-
-    scene.add(mesh);
-    // image show
-    frame_ver1 = new THREE.BoxGeometry(400, 450, 2);
-    //console.log(poleMat);
-    mesh = new THREE.Mesh(frame_ver1, frameMaterial);
-    mesh.position.x = posX;
-    mesh.position.y = posY;
-    mesh.position.z = posZ - 260;
-    mesh.receiveShadow = true;
-    mesh.castShadow = false;
-    mesh.name = "PiVR1"; // + i;
-
-    scene.add(mesh);
-    posZ += (-300)
-        //}
-
-    //frame pic 2 ver 1 left
-    frame_v_out2 = new THREE.BoxGeometry(400, 300, 2);
-
-    mesh = new THREE.Mesh(frame_v_out2, frameMat);
-    mesh.position.x = posX - 700;
-    mesh.position.y = posY;
-    mesh.position.z = posZ + 20;
-    mesh.receiveShadow = true;
-    mesh.castShadow = false;
-
-    scene.add(mesh);
-    //image show pic 2 ver 1 left
-
-    frame_ver2 = new THREE.BoxGeometry(500, 400, 2);
-
-    mesh = new THREE.Mesh(frame_ver2, frameMaterial);
-    mesh.position.x = posX - 700;
-    mesh.position.y = posY;
-    mesh.position.z = posZ + 30;
-    mesh.name = "PiVR2";
-
-    scene.add(mesh);
-    posZ += (-300);
-
-
-    //frame pic 3 ver 1 left
-    frame_v_out3 = new THREE.BoxGeometry(400, 300, 2);
-
-    mesh = new THREE.Mesh(frame_v_out3, frameMat);
-    mesh.position.x = posX - 700;
-    mesh.position.y = posY - 450;
-    mesh.position.z = posZ + 330;
-    mesh.receiveShadow = true;
-    mesh.castShadow = false;
-
-    scene.add(mesh);
-    //image show pic 3 ver 1 left
-
-    frame_ver3 = new THREE.BoxGeometry(500, 400, 2);
-
-    mesh = new THREE.Mesh(frame_ver3, frameMaterial);
-    mesh.position.x = posX - 700;
-    mesh.position.y = posY - 450;
-    mesh.position.z = posZ + 350;
-    mesh.name = "PiVR3";
-
-    scene.add(mesh);
-    posZ += (-300);
-
-}
-
-function addPictureBigWallMiddel(positionX) { //max pic: 3
-    let frame_v_out_1, frame_ver_1,
-        frame_v_out_2, frame_ver_2;
-
-    /*  position wall ver 2
-        mesh.position.y = - 250;
-        mesh.position.x = 900;
-        mesh.position.z = -375;
-        ver 2
-        positionX = 930
-    */
-    let posX = positionX,
-        posY = 500,
-        posZ = -7450;
-    const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/puppy2.jpg');
-    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
-    frameTexture.repeat.set(1, 1);
-    frameTexture.anisotropy = 16;
-    frameTexture.encoding = THREE.sRGBEncoding;
-
-    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
-    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
-
-    //for (var i = 1; i <= 3; i++) {
-
-    // frame
-    frame_v_out_1 = new THREE.BoxGeometry(455, 255, 2);
-    //console.log(poleMat);
-    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
-    mesh.position.x = posX;
-    mesh.position.y = posY;
-    mesh.position.z = posZ;
-    mesh.receiveShadow = true;
-    mesh.castShadow = false;
-
-
-    scene.add(mesh);
-    // image show
-    frame_ver_1 = new THREE.BoxGeometry(450, 250, 2);
-    //console.log(poleMat);
-    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh = new THREE.Mesh(frame_v_out, frameMat);
     mesh.position.x = posX;
     mesh.position.y = posY;
     mesh.position.z = posZ + 5;
     mesh.receiveShadow = true;
     mesh.castShadow = false;
-    mesh.name = "wallver_2_"; // + i;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver = new THREE.BoxGeometry(850, 650, 2);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver, frameMaterial);
+    mesh.position.x = posX;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 10;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    // mesh.name = "wallver_2_"; // + i;
     //  console.log(mesh.name);
     scene.add(mesh);
     posZ += (-300)
-        //}
+
+
 }
 
-
-
-function addPictureBigWallLeft(positionX) { //max pic: 3
-    let frame_v_out_1, frame_ver_1,
-        frame_v_out_2, frame_ver_2;
+function addPictureBigWallMiddel1(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
 
     /*  position wall ver 2
         mesh.position.y = - 250;
@@ -1122,8 +836,8 @@ function addPictureBigWallLeft(positionX) { //max pic: 3
         positionX = 930
     */
     let posX = positionX,
-        posY = 500,
-        posZ = -6000;
+        posY = 450,
+        posZ = -5500;
     const loader = new THREE.TextureLoader();
     const frameTexture = loader.load('../assets/images/puppy2.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
@@ -1137,24 +851,24 @@ function addPictureBigWallLeft(positionX) { //max pic: 3
     //for (var i = 1; i <= 3; i++) {
 
     // frame
-    frame_v_out_1 = new THREE.BoxGeometry(2, 255, 455);
+    frame_v_out_1 = new THREE.BoxGeometry(455, 355, 55);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_v_out_1, frameMat);
-    mesh.position.x = posX;
+    mesh.position.x = posX - 3000;
     mesh.position.y = posY;
-    mesh.position.z = posZ;
+    mesh.position.z = posZ + 40;
     mesh.receiveShadow = true;
     mesh.castShadow = false;
 
 
     scene.add(mesh);
     // image show
-    frame_ver_1 = new THREE.BoxGeometry(2, 250, 455);
+    frame_ver_1 = new THREE.BoxGeometry(455, 350, 5);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
-    mesh.position.x = posX + 10;
+    mesh.position.x = posX - 3000;
     mesh.position.y = posY;
-    mesh.position.z = posZ;
+    mesh.position.z = posZ + 70;
     mesh.receiveShadow = true;
     mesh.castShadow = false;
     mesh.name = "wallver_2_"; // + i;
@@ -1165,8 +879,167 @@ function addPictureBigWallLeft(positionX) { //max pic: 3
 }
 
 
+function addPictureBigWallMiddel2(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
 
-function addPictureBigWallRight(positionX) { //max pic: 3
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 450,
+        posZ = -5500;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(455, 355, 55);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX - 2200;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 40;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(455, 350, 5);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX - 2200;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 70;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+function addPictureBigWallMiddel3(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 450,
+        posZ = -5500;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(455, 355, 55);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX - 1400;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 40;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(455, 350, 5);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX - 1400;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 70;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+function addPictureBigWallMiddel4(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 550,
+        posZ = -5500;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh2.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(350, 655, 55);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX - 600;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 40;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(355, 650, 5);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX - 600;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 70;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+
+function addPictureBigWallMiddel5(positionX) { //max pic: 3
     let frame_v_out_1, frame_ver_1,
         frame_v_out_2, frame_ver_2;
 
@@ -1178,8 +1051,8 @@ function addPictureBigWallRight(positionX) { //max pic: 3
         positionX = 930
     */
     let posX = positionX,
-        posY = 500,
-        posZ = -6000;
+        posY = 450,
+        posZ = -5500;
     const loader = new THREE.TextureLoader();
     const frameTexture = loader.load('../assets/images/puppy2.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
@@ -1193,10 +1066,225 @@ function addPictureBigWallRight(positionX) { //max pic: 3
     //for (var i = 1; i <= 3; i++) {
 
     // frame
-    frame_v_out_1 = new THREE.BoxGeometry(2, 255, 455);
+    frame_v_out_1 = new THREE.BoxGeometry(555, 455, 55);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_v_out_1, frameMat);
-    mesh.position.x = posX;
+    mesh.position.x = posX + 200;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 40;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(555, 450, 5);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX + 200;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 70;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+
+function addPictureBigWallMiddel6(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1,
+        frame_v_out_2, frame_ver_2;
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 450,
+        posZ = -5500;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/puppy2.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(555, 455, 55);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX + 1100;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 40;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(555, 450, 5);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX + 1100;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 70;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+function addPictureBigWallMiddel7(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 450,
+        posZ = -5500;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(455, 355, 55);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX + 2000;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 40;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(455, 350, 5);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX + 2000;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 70;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+function addPictureBigWallMiddel8(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 550,
+        posZ = -5500;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh2.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(350, 655, 55);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX + 2700;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 40;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(355, 650, 5);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX + 2700;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 70;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+
+
+function addPictureBigWallLeft1(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
+        /*  position wall ver 2
+            mesh.position.y = - 250;
+            mesh.position.x = 900;
+            mesh.position.z = -375;
+            ver 2
+            positionX = 930
+        */
+    let posX = positionX,
+        posY = 550,
+        posZ = 5400;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/puppy2.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(55, 455, 555);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX + 40;
     mesh.position.y = posY;
     mesh.position.z = posZ;
     mesh.receiveShadow = true;
@@ -1205,10 +1293,10 @@ function addPictureBigWallRight(positionX) { //max pic: 3
 
     scene.add(mesh);
     // image show
-    frame_ver_1 = new THREE.BoxGeometry(2, 250, 455);
+    frame_ver_1 = new THREE.BoxGeometry(5, 450, 555);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
-    mesh.position.x = posX - 10;
+    mesh.position.x = posX + 70;
     mesh.position.y = posY;
     mesh.position.z = posZ;
     mesh.receiveShadow = true;
@@ -1220,6 +1308,1118 @@ function addPictureBigWallRight(positionX) { //max pic: 3
         //}
 }
 
+function addPictureBigWallLeft2(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
+        /*  position wall ver 2
+            mesh.position.y = - 250;
+            mesh.position.x = 900;
+            mesh.position.z = -375;
+            ver 2
+            positionX = 930
+        */
+    let posX = positionX,
+        posY = 550,
+        posZ = 5400;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(55, 455, 555);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX + 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 900;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(5, 450, 555);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX + 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 900;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+
+function addPictureBigWallLeft3(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
+        /*  position wall ver 2
+            mesh.position.y = - 250;
+            mesh.position.x = 900;
+            mesh.position.z = -375;
+            ver 2
+            positionX = 930
+        */
+    let posX = positionX,
+        posY = 650,
+        posZ = 5400;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(55, 555, 655);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX + 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 1900;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(5, 550, 655);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX + 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 1900;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+function addPictureBigWallLeft4(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
+        /*  position wall ver 2
+            mesh.position.y = - 250;
+            mesh.position.x = 900;
+            mesh.position.z = -375;
+            ver 2
+            positionX = 930
+        */
+    let posX = positionX,
+        posY = 650,
+        posZ = 5400;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh2.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(55, 655, 450);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX + 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 2900;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(5, 650, 450);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX + 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 2900;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+
+function addPictureBigWallLeft5(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
+        /*  position wall ver 2
+            mesh.position.y = - 250;
+            mesh.position.x = 900;
+            mesh.position.z = -375;
+            ver 2
+            positionX = 930
+        */
+    let posX = positionX,
+        posY = 650,
+        posZ = 5400;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh2.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(55, 655, 350);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX + 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 3700;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(5, 650, 350);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX + 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 3700;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+
+function addPictureBigWallLeft6(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
+        /*  position wall ver 2
+            mesh.position.y = - 250;
+            mesh.position.x = 900;
+            mesh.position.z = -375;
+            ver 2
+            positionX = 930
+        */
+    let posX = positionX,
+        posY = 650,
+        posZ = 5400;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(55, 455, 555);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX + 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 4600;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(5, 450, 555);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX + 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 4600;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+
+function addPictureBigWallLeft7(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
+        /*  position wall ver 2
+            mesh.position.y = - 250;
+            mesh.position.x = 900;
+            mesh.position.z = -375;
+            ver 2
+            positionX = 930
+        */
+    let posX = positionX,
+        posY = 650,
+        posZ = 5400;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(55, 455, 555);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX + 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 5600;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(5, 450, 555);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX + 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 5600;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+function addPictureBigWallLeft8(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
+        /*  position wall ver 2
+            mesh.position.y = - 250;
+            mesh.position.x = 900;
+            mesh.position.z = -375;
+            ver 2
+            positionX = 930
+        */
+    let posX = positionX,
+        posY = 650,
+        posZ = 5400;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(55, 455, 555);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX + 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 6600;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(5, 450, 555);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX + 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 6600;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+function addPictureBigWallLeft9(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
+        /*  position wall ver 2
+            mesh.position.y = - 250;
+            mesh.position.x = 900;
+            mesh.position.z = -375;
+            ver 2
+            positionX = 930
+        */
+    let posX = positionX,
+        posY = 650,
+        posZ = 5400;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(55, 455, 555);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX + 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 7600;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(5, 450, 555);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX + 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 7600;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+function addPictureBigWallLeft10(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
+        /*  position wall ver 2
+            mesh.position.y = - 250;
+            mesh.position.x = 900;
+            mesh.position.z = -375;
+            ver 2
+            positionX = 930
+        */
+    let posX = positionX,
+        posY = 650,
+        posZ = 5400;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/puppy.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(55, 455, 555);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX + 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 8600;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(5, 450, 555);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX + 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 8600;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+function addPictureBigWallLeft11(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
+        /*  position wall ver 2
+            mesh.position.y = - 250;
+            mesh.position.x = 900;
+            mesh.position.z = -375;
+            ver 2
+            positionX = 930
+        */
+    let posX = positionX,
+        posY = 650,
+        posZ = 5400;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(55, 455, 555);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX + 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 9600;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(5, 450, 555);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX + 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 9600;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+
+
+function addPictureBigWallRight1(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 650,
+        posZ = 5400;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/puppy2.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(2, 455, 555);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX - 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(2, 450, 555);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX - 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+function addPictureBigWallRight2(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 650,
+        posZ = 5400;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(55, 455, 555);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX - 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 900;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(5, 450, 555);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX - 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 900;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+
+function addPictureBigWallRight3(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 550,
+        posZ = 5400;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(55, 455, 555);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX - 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 1800;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(5, 450, 555);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX - 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 1800;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+function addPictureBigWallRight4(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 650,
+        posZ = 5400;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh2.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(55, 655, 355);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX - 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 2600;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(5, 650, 355);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX - 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 2600;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+function addPictureBigWallRight5(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 750,
+        posZ = 5400;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(55, 455, 555);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX - 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 3500;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(5, 450, 555);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX - 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 3500;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+
+function addPictureBigWallRight6(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 750,
+        posZ = 5400;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/puppy2.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(55, 555, 655);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX - 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 4500;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(5, 550, 655);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX - 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 4500;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+function addPictureBigWallRight7(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 750,
+        posZ = 5400;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/puppy2.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(55, 555, 655);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX - 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 5500;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(5, 550, 655);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX - 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 5500;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+function addPictureBigWallRight8(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 750,
+        posZ = 5400;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh2.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(55, 655, 455);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX - 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 6500;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(5, 650, 455);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX - 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 6500;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+function addPictureBigWallRight9(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 750,
+        posZ = 5400;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh2.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(55, 655, 455);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX - 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 7400;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(5, 650, 455);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX - 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 7400;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+function addPictureBigWallRight10(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 750,
+        posZ = 5400;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(55, 455, 355);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX - 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 8300;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(5, 450, 355);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX - 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 8300;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+function addPictureBigWallRight11(positionX) { //max pic: 3
+    let frame_v_out_1, frame_ver_1
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 750,
+        posZ = 5400;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    //for (var i = 1; i <= 3; i++) {
+
+    // frame
+    frame_v_out_1 = new THREE.BoxGeometry(55, 455, 355);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out_1, frameMat);
+    mesh.position.x = posX - 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 9100;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+
+    scene.add(mesh);
+    // image show
+    frame_ver_1 = new THREE.BoxGeometry(5, 450, 355);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
+    mesh.position.x = posX - 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 9100;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; // + i;
+    //  console.log(mesh.name);
+    scene.add(mesh);
+    posZ += (-300)
+        //}
+}
+
+// hang tranh phia truoc 1
 
 function addPicturesWallVer1(positionX) { //max pic: 3
     let frame_v_out, frame_ver;
@@ -1232,8 +2432,8 @@ function addPicturesWallVer1(positionX) { //max pic: 3
         positionX = 930
     */
     let posX = positionX,
-        posY = 500,
-        posZ = 900;
+        posY = 550,
+        posZ = 3000;
     const loader = new THREE.TextureLoader();
     const frameTexture = loader.load('../assets/images/puppy2.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
@@ -1247,23 +2447,23 @@ function addPicturesWallVer1(positionX) { //max pic: 3
     // for (var i = 1; i <= 6; i++) {
 
     // frame
-    frame_v_out = new THREE.BoxGeometry(2, 255, 455);
+    frame_v_out = new THREE.BoxGeometry(455, 450, 55);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_v_out, frameMat);
-    mesh.position.x = posX + 5;
+    mesh.position.x = posX;
     mesh.position.y = posY;
-    mesh.position.z = posZ + 400;
+    mesh.position.z = posZ + 40;
     mesh.receiveShadow = true;
     mesh.castShadow = false;
 
     scene.add(mesh);
     // image show
-    frame_ver = new THREE.BoxGeometry(2, 250, 455);
+    frame_ver = new THREE.BoxGeometry(455, 450, 5);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_ver, frameMaterial);
-    mesh.position.x = posX + 30;
+    mesh.position.x = posX;
     mesh.position.y = posY;
-    mesh.position.z = posZ + 400;
+    mesh.position.z = posZ + 70;
     mesh.receiveShadow = true;
     mesh.castShadow = false;
     mesh.name = "wallver_2_"; //+ i;
@@ -1285,10 +2485,10 @@ function addPicturesWallVer2(positionX) { //max pic: 3
         positionX = 930
     */
     let posX = positionX,
-        posY = 500,
-        posZ = 900;
+        posY = 550,
+        posZ = 3000;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/puppy2.jpg');
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -1300,23 +2500,23 @@ function addPicturesWallVer2(positionX) { //max pic: 3
     // for (var i = 1; i <= 6; i++) {
 
     // frame
-    frame_v_out = new THREE.BoxGeometry(2, 255, 455);
+    frame_v_out = new THREE.BoxGeometry(555, 455, 55);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_v_out, frameMat);
-    mesh.position.x = posX - 5;
+    mesh.position.x = posX + 100;
     mesh.position.y = posY;
-    mesh.position.z = posZ + 400;
+    mesh.position.z = posZ + 40;
     mesh.receiveShadow = true;
     mesh.castShadow = false;
 
     scene.add(mesh);
     // image show
-    frame_ver = new THREE.BoxGeometry(2, 250, 455);
+    frame_ver = new THREE.BoxGeometry(555, 450, 5);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_ver, frameMaterial);
-    mesh.position.x = posX - 30;
+    mesh.position.x = posX + 100;
     mesh.position.y = posY;
-    mesh.position.z = posZ + 400;
+    mesh.position.z = posZ + 70;
     mesh.receiveShadow = true;
     mesh.castShadow = false;
     mesh.name = "wallver_2_"; //+ i;
@@ -1338,10 +2538,10 @@ function addPicturesWallVer3(positionX) { //max pic: 3
         positionX = 930
     */
     let posX = positionX,
-        posY = 500,
-        posZ = 900;
+        posY = 550,
+        posZ = 3000;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/puppy2.jpg');
+    const frameTexture = loader.load('../assets/images/tranh2.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -1353,23 +2553,23 @@ function addPicturesWallVer3(positionX) { //max pic: 3
     // for (var i = 1; i <= 6; i++) {
 
     // frame
-    frame_v_out = new THREE.BoxGeometry(2, 255, 455);
+    frame_v_out = new THREE.BoxGeometry(350, 655, 55);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_v_out, frameMat);
-    mesh.position.x = posX - 25;
+    mesh.position.x = posX + 100;
     mesh.position.y = posY;
-    mesh.position.z = posZ + 400;
+    mesh.position.z = posZ + 40;
     mesh.receiveShadow = true;
     mesh.castShadow = false;
 
     scene.add(mesh);
     // image show
-    frame_ver = new THREE.BoxGeometry(2, 250, 455);
+    frame_ver = new THREE.BoxGeometry(350, 655, 5);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_ver, frameMaterial);
-    mesh.position.x = posX - 30;
+    mesh.position.x = posX + 100;
     mesh.position.y = posY;
-    mesh.position.z = posZ + 400;
+    mesh.position.z = posZ + 70;
     mesh.receiveShadow = true;
     mesh.castShadow = false;
     mesh.name = "wallver_2_"; //+ i;
@@ -1390,10 +2590,10 @@ function addPicturesWallVer4(positionX) { //max pic: 3
         positionX = 930
     */
     let posX = positionX,
-        posY = 500,
-        posZ = 900;
+        posY = 550,
+        posZ = 3000;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/puppy2.jpg');
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -1405,23 +2605,286 @@ function addPicturesWallVer4(positionX) { //max pic: 3
     // for (var i = 1; i <= 6; i++) {
 
     // frame
-    frame_v_out = new THREE.BoxGeometry(2, 255, 455);
+    frame_v_out = new THREE.BoxGeometry(555, 450, 55);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_v_out, frameMat);
-    mesh.position.x = posX + 25;
+    mesh.position.x = posX + 100;
     mesh.position.y = posY;
-    mesh.position.z = posZ + 400;
+    mesh.position.z = posZ + 40;
     mesh.receiveShadow = true;
     mesh.castShadow = false;
 
     scene.add(mesh);
     // image show
-    frame_ver = new THREE.BoxGeometry(2, 250, 455);
+    frame_ver = new THREE.BoxGeometry(555, 450, 5);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_ver, frameMaterial);
-    mesh.position.x = posX + 30;
+    mesh.position.x = posX + 100;
     mesh.position.y = posY;
-    mesh.position.z = posZ + 400;
+    mesh.position.z = posZ + 70;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; //+ i;
+
+    scene.add(mesh);
+    posZ += (-300)
+        // }
+}
+
+//hang tranh ben trai
+function addPicturesWallVer5(positionX) { //max pic: 3
+    let frame_v_out, frame_ver;
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 550,
+        posZ = 500;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    // for (var i = 1; i <= 6; i++) {
+
+    // frame
+    frame_v_out = new THREE.BoxGeometry(55, 550, 655);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out, frameMat);
+    mesh.position.x = posX + 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 1100;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+    scene.add(mesh);
+    // image show
+    frame_ver = new THREE.BoxGeometry(5, 550, 655);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver, frameMaterial);
+    mesh.position.x = posX + 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 1100;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; //+ i;
+
+    scene.add(mesh);
+    posZ += (-300)
+        // }
+}
+
+function addPicturesWallVer6(positionX) { //max pic: 3
+    let frame_v_out, frame_ver;
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 550,
+        posZ = 500;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    // for (var i = 1; i <= 6; i++) {
+
+    // frame
+    frame_v_out = new THREE.BoxGeometry(55, 550, 655);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out, frameMat);
+    mesh.position.x = posX + 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 100;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+    scene.add(mesh);
+    // image show
+    frame_ver = new THREE.BoxGeometry(5, 550, 655);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver, frameMaterial);
+    mesh.position.x = posX + 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 100;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; //+ i;
+
+    scene.add(mesh);
+    posZ += (-300)
+        // }
+}
+
+function addPicturesWallVer7(positionX) { //max pic: 3
+    let frame_v_out, frame_ver;
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 550,
+        posZ = 500;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    // for (var i = 1; i <= 6; i++) {
+
+    // frame
+    frame_v_out = new THREE.BoxGeometry(55, 550, 655);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out, frameMat);
+    mesh.position.x = posX + 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 900;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+    scene.add(mesh);
+    // image show
+    frame_ver = new THREE.BoxGeometry(5, 550, 655);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver, frameMaterial);
+    mesh.position.x = posX + 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 900;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; //+ i;
+
+    scene.add(mesh);
+    posZ += (-300)
+        // }
+}
+
+//hang tranh giua
+
+function addPicturesWallVer8(positionX) { //max pic: 3
+    let frame_v_out, frame_ver;
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 550,
+        posZ = -1250;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh2.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    // for (var i = 1; i <= 6; i++) {
+
+    // frame
+    frame_v_out = new THREE.BoxGeometry(350, 655, 55);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out, frameMat);
+    mesh.position.x = posX;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 40;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+    scene.add(mesh);
+    // image show
+    frame_ver = new THREE.BoxGeometry(350, 655, 5);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver, frameMaterial);
+    mesh.position.x = posX;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 70;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; //+ i;
+
+    scene.add(mesh);
+    posZ += (-300)
+        // }
+}
+
+function addPicturesWallVer9(positionX) { //max pic: 3
+    let frame_v_out, frame_ver;
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 750,
+        posZ = -1250;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    // for (var i = 1; i <= 6; i++) {
+
+    // frame
+    frame_v_out = new THREE.BoxGeometry(455, 355, 55);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out, frameMat);
+    mesh.position.x = posX + 500;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 40;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+    scene.add(mesh);
+    // image show
+    frame_ver = new THREE.BoxGeometry(455, 350, 5);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver, frameMaterial);
+    mesh.position.x = posX + 500;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 70;
     mesh.receiveShadow = true;
     mesh.castShadow = false;
     mesh.name = "wallver_2_"; //+ i;
@@ -1432,8 +2895,7 @@ function addPicturesWallVer4(positionX) { //max pic: 3
 }
 
 
-
-function addPicturesOppositeWallVer1(positionX) { //max pic: 3
+function addPicturesWallVer10(positionX) { //max pic: 3
     let frame_v_out, frame_ver;
 
     /*  position wall ver 2
@@ -1444,8 +2906,961 @@ function addPicturesOppositeWallVer1(positionX) { //max pic: 3
         positionX = 930
     */
     let posX = positionX,
-        posY = 500,
-        posZ = -3900;
+        posY = 450,
+        posZ = -1250;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    // for (var i = 1; i <= 6; i++) {
+
+    // frame
+    frame_v_out = new THREE.BoxGeometry(455, 355, 55);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out, frameMat);
+    mesh.position.x = posX + 1100;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 40;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+    scene.add(mesh);
+    // image show
+    frame_ver = new THREE.BoxGeometry(455, 350, 5);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver, frameMaterial);
+    mesh.position.x = posX + 1100;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 70;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; //+ i;
+
+    scene.add(mesh);
+    posZ += (-300)
+        // }
+}
+
+function addPicturesWallVer11(positionX) { //max pic: 3
+    let frame_v_out, frame_ver;
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 550,
+        posZ = -1250;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    // for (var i = 1; i <= 6; i++) {
+
+    // frame
+    frame_v_out = new THREE.BoxGeometry(655, 555, 55);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out, frameMat);
+    mesh.position.x = posX + 1800;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 40;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+    scene.add(mesh);
+    // image show
+    frame_ver = new THREE.BoxGeometry(655, 550, 5);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver, frameMaterial);
+    mesh.position.x = posX + 1800;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 70;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; //+ i;
+
+    scene.add(mesh);
+    posZ += (-300)
+        // }
+}
+
+
+//hang tranh ben phai
+
+function addPicturesWallVer12(positionX) { //max pic: 3
+    let frame_v_out, frame_ver;
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 650,
+        posZ = -800;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    // for (var i = 1; i <= 6; i++) {
+
+    // frame
+    frame_v_out = new THREE.BoxGeometry(55, 750, 1355);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out, frameMat);
+    mesh.position.x = posX - 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+    scene.add(mesh);
+    // image show
+    frame_ver = new THREE.BoxGeometry(5, 750, 1355);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver, frameMaterial);
+    mesh.position.x = posX - 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; //+ i;
+
+    scene.add(mesh);
+    posZ += (-300)
+        // }
+}
+
+function addPicturesWallVer13(positionX) { //max pic: 3
+    let frame_v_out, frame_ver;
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 550,
+        posZ = 1000;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    // for (var i = 1; i <= 6; i++) {
+
+    // frame
+    frame_v_out = new THREE.BoxGeometry(55, 550, 755);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out, frameMat);
+    mesh.position.x = posX - 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+    scene.add(mesh);
+    // image show
+    frame_ver = new THREE.BoxGeometry(5, 550, 755);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver, frameMaterial);
+    mesh.position.x = posX - 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; //+ i;
+
+    scene.add(mesh);
+    posZ += (-300)
+        // }
+}
+
+//hang tranh phia truoc 2
+function addPicturesWallVer14(positionX) { //max pic: 3
+    let frame_v_out, frame_ver;
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 550,
+        posZ = 3000;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    // for (var i = 1; i <= 6; i++) {
+
+    // frame
+    frame_v_out = new THREE.BoxGeometry(655, 555, 55);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out, frameMat);
+    mesh.position.x = posX + 1000;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 40;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+    scene.add(mesh);
+    // image show
+    frame_ver = new THREE.BoxGeometry(655, 550, 5);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver, frameMaterial);
+    mesh.position.x = posX + 1000;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 70;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; //+ i;
+
+    scene.add(mesh);
+    posZ += (-300)
+        // }
+}
+
+function addPicturesWallVer15(positionX) { //max pic: 3
+    let frame_v_out, frame_ver;
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 650,
+        posZ = 3000;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    // for (var i = 1; i <= 6; i++) {
+
+    // frame
+    frame_v_out = new THREE.BoxGeometry(555, 455, 55);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out, frameMat);
+    mesh.position.x = posX;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 40;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+    scene.add(mesh);
+    // image show
+    frame_ver = new THREE.BoxGeometry(555, 450, 5);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver, frameMaterial);
+    mesh.position.x = posX;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 70;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; //+ i;
+
+    scene.add(mesh);
+    posZ += (-300)
+        // }
+}
+
+
+function addPicturesWallVer16(positionX) { //max pic: 3
+    let frame_v_out, frame_ver;
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 550,
+        posZ = 3000;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh2.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    // for (var i = 1; i <= 6; i++) {
+
+    // frame
+    frame_v_out = new THREE.BoxGeometry(350, 655, 55);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out, frameMat);
+    mesh.position.x = posX - 1000;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 40;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+    scene.add(mesh);
+    // image show
+    frame_ver = new THREE.BoxGeometry(350, 655, 5);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver, frameMaterial);
+    mesh.position.x = posX - 1000;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 70;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; //+ i;
+
+    scene.add(mesh);
+    posZ += (-300)
+        // }
+}
+
+
+//hang tranh ben trai 2
+
+
+function addPicturesWallVer17(positionX) { //max pic: 3
+    let frame_v_out, frame_ver;
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 650,
+        posZ = 500;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    // for (var i = 1; i <= 6; i++) {
+
+    // frame
+    frame_v_out = new THREE.BoxGeometry(55, 550, 655);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out, frameMat);
+    mesh.position.x = posX - 80;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 1000;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+    scene.add(mesh);
+    // image show
+    frame_ver = new THREE.BoxGeometry(5, 550, 655);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver, frameMaterial);
+    mesh.position.x = posX - 120;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 1000;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; //+ i;
+
+    scene.add(mesh);
+    posZ += (-300)
+        // }
+}
+
+
+function addPicturesWallVer18(positionX) { //max pic: 3
+    let frame_v_out, frame_ver;
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 950,
+        posZ = 500;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    // for (var i = 1; i <= 6; i++) {
+
+    // frame
+    frame_v_out = new THREE.BoxGeometry(55, 350, 455);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out, frameMat);
+    mesh.position.x = posX - 80;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 300;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+    scene.add(mesh);
+    // image show
+    frame_ver = new THREE.BoxGeometry(5, 350, 455);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver, frameMaterial);
+    mesh.position.x = posX - 120;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 300;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; //+ i;
+
+    scene.add(mesh);
+    posZ += (-300)
+        // }
+}
+
+function addPicturesWallVer19(positionX) { //max pic: 3
+    let frame_v_out, frame_ver;
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 550,
+        posZ = 500;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    // for (var i = 1; i <= 6; i++) {
+
+    // frame
+    frame_v_out = new THREE.BoxGeometry(55, 350, 455);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out, frameMat);
+    mesh.position.x = posX - 80;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 300;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+    scene.add(mesh);
+    // image show
+    frame_ver = new THREE.BoxGeometry(5, 350, 455);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver, frameMaterial);
+    mesh.position.x = posX - 120;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 300;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; //+ i;
+
+    scene.add(mesh);
+    posZ += (-300)
+        // }
+}
+
+function addPicturesWallVer20(positionX) { //max pic: 3
+    let frame_v_out, frame_ver;
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 550,
+        posZ = 500;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh2.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    // for (var i = 1; i <= 6; i++) {
+
+    // frame
+    frame_v_out = new THREE.BoxGeometry(55, 655, 350);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out, frameMat);
+    mesh.position.x = posX - 80;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + -300;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+    scene.add(mesh);
+    // image show
+    frame_ver = new THREE.BoxGeometry(5, 655, 350);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver, frameMaterial);
+    mesh.position.x = posX - 120;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 300;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; //+ i;
+
+    scene.add(mesh);
+    posZ += (-300)
+        // }
+}
+
+
+function addPicturesWallVer21(positionX) { //max pic: 3
+    let frame_v_out, frame_ver;
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 550,
+        posZ = 500;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    // for (var i = 1; i <= 6; i++) {
+
+    // frame
+    frame_v_out = new THREE.BoxGeometry(55, 550, 655);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out, frameMat);
+    mesh.position.x = posX - 80;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 1000;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+    scene.add(mesh);
+    // image show
+    frame_ver = new THREE.BoxGeometry(5, 550, 655);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver, frameMaterial);
+    mesh.position.x = posX - 120;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 1000;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; //+ i;
+
+    scene.add(mesh);
+    posZ += (-300)
+        // }
+}
+
+
+//hang tranh giua 2
+
+function addPicturesWallVer22(positionX) { //max pic: 3
+    let frame_v_out, frame_ver;
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 550,
+        posZ = -1250;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    // for (var i = 1; i <= 6; i++) {
+
+    // frame
+    frame_v_out = new THREE.BoxGeometry(555, 455, 55);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out, frameMat);
+    mesh.position.x = posX - 1000;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 40;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+    scene.add(mesh);
+    // image show
+    frame_ver = new THREE.BoxGeometry(550, 450, 5);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver, frameMaterial);
+    mesh.position.x = posX - 1000;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 70;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; //+ i;
+
+    scene.add(mesh);
+    posZ += (-300)
+        // }
+}
+
+function addPicturesWallVer23(positionX) { //max pic: 3
+    let frame_v_out, frame_ver;
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 550,
+        posZ = -1250;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    // for (var i = 1; i <= 6; i++) {
+
+    // frame
+    frame_v_out = new THREE.BoxGeometry(555, 455, 55);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out, frameMat);
+    mesh.position.x = posX;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 40;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+    scene.add(mesh);
+    // image show
+    frame_ver = new THREE.BoxGeometry(550, 450, 5);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver, frameMaterial);
+    mesh.position.x = posX;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 70;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; //+ i;
+
+    scene.add(mesh);
+    posZ += (-300)
+        // }
+}
+
+function addPicturesWallVer24(positionX) { //max pic: 3
+    let frame_v_out, frame_ver;
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 550,
+        posZ = -1250;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    // for (var i = 1; i <= 6; i++) {
+
+    // frame
+    frame_v_out = new THREE.BoxGeometry(555, 455, 55);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out, frameMat);
+    mesh.position.x = posX + 1000;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 40;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+    scene.add(mesh);
+    // image show
+    frame_ver = new THREE.BoxGeometry(550, 450, 5);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver, frameMaterial);
+    mesh.position.x = posX + 1000;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 70;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; //+ i;
+
+    scene.add(mesh);
+    posZ += (-300)
+        // }
+}
+
+
+//hang tranh phai 2
+
+function addPicturesWallVer25(positionX) { //max pic: 3
+    let frame_v_out, frame_ver;
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 550,
+        posZ = 0;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    // for (var i = 1; i <= 6; i++) {
+
+    // frame
+    frame_v_out = new THREE.BoxGeometry(55, 550, 655);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out, frameMat);
+    mesh.position.x = posX + 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 1300;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+    scene.add(mesh);
+    // image show
+    frame_ver = new THREE.BoxGeometry(5, 550, 655);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver, frameMaterial);
+    mesh.position.x = posX + 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 1300;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; //+ i;
+
+    scene.add(mesh);
+    posZ += (-300)
+        // }
+}
+
+function addPicturesWallVer26(positionX) { //max pic: 3
+    let frame_v_out, frame_ver;
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 650,
+        posZ = 0;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    // for (var i = 1; i <= 6; i++) {
+
+    // frame
+    frame_v_out = new THREE.BoxGeometry(55, 350, 455);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out, frameMat);
+    mesh.position.x = posX + 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 500;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+    scene.add(mesh);
+    // image show
+    frame_ver = new THREE.BoxGeometry(5, 350, 455);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver, frameMaterial);
+    mesh.position.x = posX + 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ - 500;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; //+ i;
+
+    scene.add(mesh);
+    posZ += (-300)
+        // }
+}
+
+function addPicturesWallVer27(positionX) { //max pic: 3
+    let frame_v_out, frame_ver;
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 450,
+        posZ = 0;
+    const loader = new THREE.TextureLoader();
+    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
+    frameTexture.repeat.set(1, 1);
+    frameTexture.anisotropy = 16;
+    frameTexture.encoding = THREE.sRGBEncoding;
+
+    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
+    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
+
+    // for (var i = 1; i <= 6; i++) {
+
+    // frame
+    frame_v_out = new THREE.BoxGeometry(55, 350, 455);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_v_out, frameMat);
+    mesh.position.x = posX + 40;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 200;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+
+    scene.add(mesh);
+    // image show
+    frame_ver = new THREE.BoxGeometry(5, 350, 455);
+    //console.log(poleMat);
+    mesh = new THREE.Mesh(frame_ver, frameMaterial);
+    mesh.position.x = posX + 70;
+    mesh.position.y = posY;
+    mesh.position.z = posZ + 200;
+    mesh.receiveShadow = true;
+    mesh.castShadow = false;
+    mesh.name = "wallver_2_"; //+ i;
+
+    scene.add(mesh);
+    posZ += (-300)
+        // }
+}
+
+function addPicturesWallVer28(positionX) { //max pic: 3
+    let frame_v_out, frame_ver;
+
+    /*  position wall ver 2
+        mesh.position.y = - 250;
+        mesh.position.x = 900;
+        mesh.position.z = -375;
+        ver 2
+        positionX = 930
+    */
+    let posX = positionX,
+        posY = 550,
+        posZ = 0;
     const loader = new THREE.TextureLoader();
     const frameTexture = loader.load('../assets/images/puppy2.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
@@ -1459,293 +3874,34 @@ function addPicturesOppositeWallVer1(positionX) { //max pic: 3
     // for (var i = 1; i <= 6; i++) {
 
     // frame
-    frame_v_out = new THREE.BoxGeometry(2, 255, 455);
+    frame_v_out = new THREE.BoxGeometry(55, 650, 755);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_v_out, frameMat);
-    mesh.position.x = posX - 30;
+    mesh.position.x = posX + 40;
     mesh.position.y = posY;
-    mesh.position.z = posZ - 400;
+    mesh.position.z = posZ + 1200;
     mesh.receiveShadow = true;
     mesh.castShadow = false;
 
     scene.add(mesh);
     // image show
-    frame_ver = new THREE.BoxGeometry(2, 250, 450);
+    frame_ver = new THREE.BoxGeometry(5, 650, 755);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_ver, frameMaterial);
-    mesh.position.x = posX - 35;
+    mesh.position.x = posX + 70;
     mesh.position.y = posY;
-    mesh.position.z = posZ - 400;
+    mesh.position.z = posZ + 1200;
     mesh.receiveShadow = true;
     mesh.castShadow = false;
-    mesh.name = "opwallver_2_"; //+ i;
+    mesh.name = "wallver_2_"; //+ i;
 
     scene.add(mesh);
     posZ += (-300)
         // }
 }
 
-function addPicturesOppositeWallVer2(positionX) { //max pic: 3
-    let frame_v_out, frame_ver;
 
-    /*  position wall ver 2
-        mesh.position.y = - 250;
-        mesh.position.x = 900;
-        mesh.position.z = -375;
-        ver 2
-        positionX = 930
-    */
-    let posX = positionX,
-        posY = 500,
-        posZ = -3900;
-    const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/puppy2.jpg');
-    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
-    frameTexture.repeat.set(1, 1);
-    frameTexture.anisotropy = 16;
-    frameTexture.encoding = THREE.sRGBEncoding;
-    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
-    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
-
-    // for (var i = 1; i <= 3; i++) {
-
-    // frame
-    frame_v_out = new THREE.BoxGeometry(2, 255, 455);
-    //console.log(poleMat);
-    mesh = new THREE.Mesh(frame_v_out, frameMat);
-    mesh.position.x = posX + 30;
-    mesh.position.y = posY;
-    mesh.position.z = posZ - 400;
-    mesh.receiveShadow = true;
-    mesh.castShadow = false;
-
-    scene.add(mesh);
-    // image show
-    frame_ver = new THREE.BoxGeometry(2, 250, 450);
-    //console.log(poleMat);
-    mesh = new THREE.Mesh(frame_ver, frameMaterial);
-    mesh.position.x = posX + 35;
-    mesh.position.y = posY;
-    mesh.position.z = posZ - 400;
-    mesh.receiveShadow = true;
-    mesh.castShadow = false;
-    mesh.name = "opwallver_1_"; // + i;
-
-    scene.add(mesh);
-    posZ += (-300)
-        // }
-}
-
-function addPicturesOppositeWallVer3(positionX) { //max pic: 3
-    let frame_v_out, frame_ver;
-
-    /*  position wall ver 2
-        mesh.position.y = - 250;
-        mesh.position.x = 900;
-        mesh.position.z = -375;
-        ver 2
-        positionX = 930
-    */
-    let posX = positionX,
-        posY = 500,
-        posZ = -3900;
-    const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/puppy2.jpg');
-    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
-    frameTexture.repeat.set(1, 1);
-    frameTexture.anisotropy = 16;
-    frameTexture.encoding = THREE.sRGBEncoding;
-
-    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
-    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
-
-    //for (var i = 1; i <= 3; i++) {
-
-    // frame
-    frame_v_out = new THREE.BoxGeometry(2, 255, 455);
-    //console.log(poleMat);
-    mesh = new THREE.Mesh(frame_v_out, frameMat);
-    mesh.position.x = posX - 30;
-    mesh.position.y = posY;
-    mesh.position.z = posZ - 400;
-    mesh.receiveShadow = true;
-    mesh.castShadow = false;
-
-    scene.add(mesh);
-    // image show
-    frame_ver = new THREE.BoxGeometry(2, 250, 450);
-    //console.log(poleMat);
-    mesh = new THREE.Mesh(frame_ver, frameMaterial);
-    mesh.position.x = posX - 35;
-    mesh.position.y = posY;
-    mesh.position.z = posZ - 400;
-    mesh.receiveShadow = true;
-    mesh.castShadow = false;
-    mesh.name = "opwallver_2_"; // + i;
-
-    scene.add(mesh);
-    posZ += (-300)
-        //}
-}
-
-
-function addPicturesOppositeWallVer4(positionX) { //max pic: 3
-    let frame_v_out, frame_ver;
-
-    /*  position wall ver 2
-        mesh.position.y = - 250;
-        mesh.position.x = 900;
-        mesh.position.z = -375;
-        ver 2
-        positionX = 930
-    */
-    let posX = positionX,
-        posY = 500,
-        posZ = -3900;
-    const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/puppy2.jpg');
-    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
-    frameTexture.repeat.set(1, 1);
-    frameTexture.anisotropy = 16;
-    frameTexture.encoding = THREE.sRGBEncoding;
-
-    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
-    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
-
-    //for (var i = 1; i <= 3; i++) {
-
-    // frame
-    frame_v_out = new THREE.BoxGeometry(2, 255, 455);
-    //console.log(poleMat);
-    mesh = new THREE.Mesh(frame_v_out, frameMat);
-    mesh.position.x = posX + 30;
-    mesh.position.y = posY;
-    mesh.position.z = posZ - 400;
-    mesh.receiveShadow = true;
-    mesh.castShadow = false;
-
-    scene.add(mesh);
-    // image show
-    frame_ver = new THREE.BoxGeometry(2, 250, 450);
-    //console.log(poleMat);
-    mesh = new THREE.Mesh(frame_ver, frameMaterial);
-    mesh.position.x = posX + 35;
-    mesh.position.y = posY;
-    mesh.position.z = posZ - 400;
-    mesh.receiveShadow = true;
-    mesh.castShadow = false;
-    mesh.name = "opwallver_2_"; // + i;
-
-    scene.add(mesh);
-    posZ += (-300)
-        //}
-}
-
-
-function addPicturesOppositeWallVer5(positionX) { //max pic: 3
-    let frame_v_out, frame_ver;
-
-    /*  position wall ver 2
-        mesh.position.y = - 250;
-        mesh.position.x = 900;
-        mesh.position.z = -375;
-        ver 2
-        positionX = 930
-    */
-    let posX = positionX,
-        posY = 500,
-        posZ = -3900;
-    const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/puppy2.jpg');
-    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
-    frameTexture.repeat.set(1, 1);
-    frameTexture.anisotropy = 16;
-    frameTexture.encoding = THREE.sRGBEncoding;
-
-    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
-    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
-
-    //for (var i = 1; i <= 3; i++) {
-
-    // frame
-    frame_v_out = new THREE.BoxGeometry(2, 255, 455);
-    //console.log(poleMat);
-    mesh = new THREE.Mesh(frame_v_out, frameMat);
-    mesh.position.x = posX - 30;
-    mesh.position.y = posY;
-    mesh.position.z = posZ - 400;
-    mesh.receiveShadow = true;
-    mesh.castShadow = false;
-
-    scene.add(mesh);
-    // image show
-    frame_ver = new THREE.BoxGeometry(2, 250, 450);
-    //console.log(poleMat);
-    mesh = new THREE.Mesh(frame_ver, frameMaterial);
-    mesh.position.x = posX - 35;
-    mesh.position.y = posY;
-    mesh.position.z = posZ - 400;
-    mesh.receiveShadow = true;
-    mesh.castShadow = false;
-    mesh.name = "opwallver_2_"; // + i;
-
-    scene.add(mesh);
-    posZ += (-300)
-        //}
-}
-
-function addPicturesOppositeWallVer6(positionX) { //max pic: 3
-    let frame_v_out, frame_ver;
-
-    /*  position wall ver 2
-        mesh.position.y = - 250;
-mesh.position.x = 900;
-        mesh.position.z = -375;
-        ver 2
-        positionX = 930
-    */
-    let posX = positionX,
-        posY = 500,
-        posZ = -3900;
-    const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/puppy2.jpg');
-    frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
-    frameTexture.repeat.set(1, 1);
-    frameTexture.anisotropy = 16;
-    frameTexture.encoding = THREE.sRGBEncoding;
-
-    const frameMaterial = new THREE.MeshLambertMaterial({ map: frameTexture });
-    const frameMat = new THREE.MeshLambertMaterial({ color: new THREE.Color("rgb(36, 36, 36)") });
-
-    //for (var i = 1; i <= 3; i++) {
-
-    // frame
-    frame_v_out = new THREE.BoxGeometry(2, 255, 455);
-    //console.log(poleMat);
-    mesh = new THREE.Mesh(frame_v_out, frameMat);
-    mesh.position.x = posX + 30;
-    mesh.position.y = posY;
-    mesh.position.z = posZ - 400;
-    mesh.receiveShadow = true;
-    mesh.castShadow = false;
-
-    scene.add(mesh);
-    // image show
-    frame_ver = new THREE.BoxGeometry(2, 250, 450);
-    //console.log(poleMat);
-    mesh = new THREE.Mesh(frame_ver, frameMaterial);
-    mesh.position.x = posX + 35;
-    mesh.position.y = posY;
-    mesh.position.z = posZ - 400;
-    mesh.receiveShadow = true;
-    mesh.castShadow = false;
-    mesh.name = "opwallver_2_"; // + i;
-
-    scene.add(mesh);
-    posZ += (-300)
-        //}
-}
-
+//resize window
 
 function onWindowResize() {
 
@@ -1837,6 +3993,10 @@ function render() {
     // }
 
     //console.log(clientX);
+
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
 
     renderer.render(scene, camera);
     // effect.render( scene, camera );
