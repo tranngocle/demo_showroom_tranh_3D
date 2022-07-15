@@ -839,7 +839,7 @@ function addPictureBigWallMiddel1(positionX) { //max pic: 3
         posY = 450,
         posZ = -5500;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/puppy2.jpg');
+    const frameTexture = loader.load('../assets/images/tranh50.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -851,7 +851,7 @@ function addPictureBigWallMiddel1(positionX) { //max pic: 3
     //for (var i = 1; i <= 3; i++) {
 
     // frame
-    frame_v_out_1 = new THREE.BoxGeometry(455, 355, 55);
+    frame_v_out_1 = new THREE.BoxGeometry(455, 395, 55);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_v_out_1, frameMat);
     mesh.position.x = posX - 3000;
@@ -863,7 +863,7 @@ function addPictureBigWallMiddel1(positionX) { //max pic: 3
 
     scene.add(mesh);
     // image show
-    frame_ver_1 = new THREE.BoxGeometry(455, 350, 5);
+    frame_ver_1 = new THREE.BoxGeometry(455, 390, 5);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
     mesh.position.x = posX - 3000;
@@ -893,7 +893,7 @@ function addPictureBigWallMiddel2(positionX) { //max pic: 3
         posY = 450,
         posZ = -5500;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh51.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -946,7 +946,7 @@ function addPictureBigWallMiddel3(positionX) { //max pic: 3
         posY = 450,
         posZ = -5500;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh52.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -999,7 +999,7 @@ function addPictureBigWallMiddel4(positionX) { //max pic: 3
         posY = 550,
         posZ = -5500;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh2.jpg');
+    const frameTexture = loader.load('../assets/images/tranh48.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -1054,7 +1054,7 @@ function addPictureBigWallMiddel5(positionX) { //max pic: 3
         posY = 450,
         posZ = -5500;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/puppy2.jpg');
+    const frameTexture = loader.load('../assets/images/tranh53.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -1109,7 +1109,7 @@ function addPictureBigWallMiddel6(positionX) { //max pic: 3
         posY = 450,
         posZ = -5500;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/puppy2.jpg');
+    const frameTexture = loader.load('../assets/images/tranh54.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -1162,7 +1162,7 @@ function addPictureBigWallMiddel7(positionX) { //max pic: 3
         posY = 450,
         posZ = -5500;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh55.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -1215,7 +1215,7 @@ function addPictureBigWallMiddel8(positionX) { //max pic: 3
         posY = 550,
         posZ = -5500;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh2.jpg');
+    const frameTexture = loader.load('../assets/images/tranh49.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -1269,7 +1269,7 @@ function addPictureBigWallLeft1(positionX) { //max pic: 3
         posY = 550,
         posZ = 5400;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/puppy2.jpg');
+    const frameTexture = loader.load('../assets/images/tranh33.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -1321,7 +1321,7 @@ function addPictureBigWallLeft2(positionX) { //max pic: 3
         posY = 550,
         posZ = 5400;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh43.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -1374,7 +1374,7 @@ function addPictureBigWallLeft3(positionX) { //max pic: 3
         posY = 650,
         posZ = 5400;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh44.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -1426,7 +1426,7 @@ function addPictureBigWallLeft4(positionX) { //max pic: 3
         posY = 650,
         posZ = 5400;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh2.jpg');
+    const frameTexture = loader.load('../assets/images/tranh19.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -1479,7 +1479,7 @@ function addPictureBigWallLeft5(positionX) { //max pic: 3
         posY = 650,
         posZ = 5400;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh2.jpg');
+    const frameTexture = loader.load('../assets/images/tranh32.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -1491,7 +1491,7 @@ function addPictureBigWallLeft5(positionX) { //max pic: 3
     //for (var i = 1; i <= 3; i++) {
 
     // frame
-    frame_v_out_1 = new THREE.BoxGeometry(55, 655, 350);
+    frame_v_out_1 = new THREE.BoxGeometry(55, 655, 450);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_v_out_1, frameMat);
     mesh.position.x = posX + 40;
@@ -1503,7 +1503,7 @@ function addPictureBigWallLeft5(positionX) { //max pic: 3
 
     scene.add(mesh);
     // image show
-    frame_ver_1 = new THREE.BoxGeometry(5, 650, 350);
+    frame_ver_1 = new THREE.BoxGeometry(5, 650, 450);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
     mesh.position.x = posX + 70;
@@ -1532,7 +1532,7 @@ function addPictureBigWallLeft6(positionX) { //max pic: 3
         posY = 650,
         posZ = 5400;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh45.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -1585,7 +1585,7 @@ function addPictureBigWallLeft7(positionX) { //max pic: 3
         posY = 650,
         posZ = 5400;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh46.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -1637,7 +1637,7 @@ function addPictureBigWallLeft8(positionX) { //max pic: 3
         posY = 650,
         posZ = 5400;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh31.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -1689,7 +1689,7 @@ function addPictureBigWallLeft9(positionX) { //max pic: 3
         posY = 650,
         posZ = 5400;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh47.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -1741,7 +1741,7 @@ function addPictureBigWallLeft10(positionX) { //max pic: 3
         posY = 650,
         posZ = 5400;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/puppy.jpg');
+    const frameTexture = loader.load('../assets/images/tranh56.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -1793,7 +1793,7 @@ function addPictureBigWallLeft11(positionX) { //max pic: 3
         posY = 650,
         posZ = 5400;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh57.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -1848,7 +1848,7 @@ function addPictureBigWallRight1(positionX) { //max pic: 3
         posY = 650,
         posZ = 5400;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/puppy2.jpg');
+    const frameTexture = loader.load('../assets/images/tranh30.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -1901,7 +1901,7 @@ function addPictureBigWallRight2(positionX) { //max pic: 3
         posY = 650,
         posZ = 5400;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh37.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -1955,7 +1955,7 @@ function addPictureBigWallRight3(positionX) { //max pic: 3
         posY = 550,
         posZ = 5400;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh38.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -2008,7 +2008,7 @@ function addPictureBigWallRight4(positionX) { //max pic: 3
         posY = 650,
         posZ = 5400;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh2.jpg');
+    const frameTexture = loader.load('../assets/images/tranh25.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -2020,7 +2020,7 @@ function addPictureBigWallRight4(positionX) { //max pic: 3
     //for (var i = 1; i <= 3; i++) {
 
     // frame
-    frame_v_out_1 = new THREE.BoxGeometry(55, 655, 355);
+    frame_v_out_1 = new THREE.BoxGeometry(55, 655, 455);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_v_out_1, frameMat);
     mesh.position.x = posX - 40;
@@ -2032,7 +2032,7 @@ function addPictureBigWallRight4(positionX) { //max pic: 3
 
     scene.add(mesh);
     // image show
-    frame_ver_1 = new THREE.BoxGeometry(5, 650, 355);
+    frame_ver_1 = new THREE.BoxGeometry(5, 650, 455);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_ver_1, frameMaterial);
     mesh.position.x = posX - 70;
@@ -2061,7 +2061,7 @@ function addPictureBigWallRight5(positionX) { //max pic: 3
         posY = 750,
         posZ = 5400;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh39.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -2115,7 +2115,7 @@ function addPictureBigWallRight6(positionX) { //max pic: 3
         posY = 750,
         posZ = 5400;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/puppy2.jpg');
+    const frameTexture = loader.load('../assets/images/tranh34.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -2168,7 +2168,7 @@ function addPictureBigWallRight7(positionX) { //max pic: 3
         posY = 750,
         posZ = 5400;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/puppy2.jpg');
+    const frameTexture = loader.load('../assets/images/tranh36.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -2221,7 +2221,7 @@ function addPictureBigWallRight8(positionX) { //max pic: 3
         posY = 750,
         posZ = 5400;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh2.jpg');
+    const frameTexture = loader.load('../assets/images/tranh35.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -2274,7 +2274,7 @@ function addPictureBigWallRight9(positionX) { //max pic: 3
         posY = 750,
         posZ = 5400;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh2.jpg');
+    const frameTexture = loader.load('../assets/images/tranh42.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -2327,7 +2327,7 @@ function addPictureBigWallRight10(positionX) { //max pic: 3
         posY = 750,
         posZ = 5400;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh28.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -2380,7 +2380,7 @@ function addPictureBigWallRight11(positionX) { //max pic: 3
         posY = 750,
         posZ = 5400;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh29.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -2435,7 +2435,7 @@ function addPicturesWallVer1(positionX) { //max pic: 3
         posY = 550,
         posZ = 3000;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/puppy2.jpg');
+    const frameTexture = loader.load('../assets/images/tranh12.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -2593,7 +2593,7 @@ function addPicturesWallVer4(positionX) { //max pic: 3
         posY = 550,
         posZ = 3000;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh7.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -2646,7 +2646,7 @@ function addPicturesWallVer5(positionX) { //max pic: 3
         posY = 550,
         posZ = 500;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh9.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -2698,7 +2698,7 @@ function addPicturesWallVer6(positionX) { //max pic: 3
         posY = 550,
         posZ = 500;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh10.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -2750,7 +2750,7 @@ function addPicturesWallVer7(positionX) { //max pic: 3
         posY = 550,
         posZ = 500;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh11.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -2804,7 +2804,7 @@ function addPicturesWallVer8(positionX) { //max pic: 3
         posY = 550,
         posZ = -1250;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh2.jpg');
+    const frameTexture = loader.load('../assets/images/tranh3.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -2856,7 +2856,7 @@ function addPicturesWallVer9(positionX) { //max pic: 3
         posY = 750,
         posZ = -1250;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh6.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -2909,7 +2909,7 @@ function addPicturesWallVer10(positionX) { //max pic: 3
         posY = 450,
         posZ = -1250;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh8.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -2961,7 +2961,7 @@ function addPicturesWallVer11(positionX) { //max pic: 3
         posY = 550,
         posZ = -1250;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh16.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -3016,7 +3016,7 @@ function addPicturesWallVer12(positionX) { //max pic: 3
         posY = 650,
         posZ = -800;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh4.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -3068,7 +3068,7 @@ function addPicturesWallVer13(positionX) { //max pic: 3
         posY = 550,
         posZ = 1000;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh14.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -3121,7 +3121,7 @@ function addPicturesWallVer14(positionX) { //max pic: 3
         posY = 550,
         posZ = 3000;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh15.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -3173,7 +3173,7 @@ function addPicturesWallVer15(positionX) { //max pic: 3
         posY = 650,
         posZ = 3000;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh18.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -3226,7 +3226,7 @@ function addPicturesWallVer16(positionX) { //max pic: 3
         posY = 550,
         posZ = 3000;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh2.jpg');
+    const frameTexture = loader.load('../assets/images/tranh13.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -3238,7 +3238,7 @@ function addPicturesWallVer16(positionX) { //max pic: 3
     // for (var i = 1; i <= 6; i++) {
 
     // frame
-    frame_v_out = new THREE.BoxGeometry(350, 655, 55);
+    frame_v_out = new THREE.BoxGeometry(450, 655, 55);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_v_out, frameMat);
     mesh.position.x = posX - 1000;
@@ -3249,7 +3249,7 @@ function addPicturesWallVer16(positionX) { //max pic: 3
 
     scene.add(mesh);
     // image show
-    frame_ver = new THREE.BoxGeometry(350, 655, 5);
+    frame_ver = new THREE.BoxGeometry(450, 655, 5);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_ver, frameMaterial);
     mesh.position.x = posX - 1000;
@@ -3280,9 +3280,9 @@ function addPicturesWallVer17(positionX) { //max pic: 3
     */
     let posX = positionX,
         posY = 650,
-        posZ = 500;
+        posZ = 700;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh20.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -3297,7 +3297,7 @@ function addPicturesWallVer17(positionX) { //max pic: 3
     frame_v_out = new THREE.BoxGeometry(55, 550, 655);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_v_out, frameMat);
-    mesh.position.x = posX - 80;
+    mesh.position.x = posX - 40;
     mesh.position.y = posY;
     mesh.position.z = posZ + 1000;
     mesh.receiveShadow = true;
@@ -3308,7 +3308,7 @@ function addPicturesWallVer17(positionX) { //max pic: 3
     frame_ver = new THREE.BoxGeometry(5, 550, 655);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_ver, frameMaterial);
-    mesh.position.x = posX - 120;
+    mesh.position.x = posX - 70;
     mesh.position.y = posY;
     mesh.position.z = posZ + 1000;
     mesh.receiveShadow = true;
@@ -3335,7 +3335,7 @@ function addPicturesWallVer18(positionX) { //max pic: 3
         posY = 950,
         posZ = 500;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh21.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -3350,7 +3350,7 @@ function addPicturesWallVer18(positionX) { //max pic: 3
     frame_v_out = new THREE.BoxGeometry(55, 350, 455);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_v_out, frameMat);
-    mesh.position.x = posX - 80;
+    mesh.position.x = posX - 40;
     mesh.position.y = posY;
     mesh.position.z = posZ + 300;
     mesh.receiveShadow = true;
@@ -3361,7 +3361,7 @@ function addPicturesWallVer18(positionX) { //max pic: 3
     frame_ver = new THREE.BoxGeometry(5, 350, 455);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_ver, frameMaterial);
-    mesh.position.x = posX - 120;
+    mesh.position.x = posX - 70;
     mesh.position.y = posY;
     mesh.position.z = posZ + 300;
     mesh.receiveShadow = true;
@@ -3387,7 +3387,7 @@ function addPicturesWallVer19(positionX) { //max pic: 3
         posY = 550,
         posZ = 500;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh23.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -3402,7 +3402,7 @@ function addPicturesWallVer19(positionX) { //max pic: 3
     frame_v_out = new THREE.BoxGeometry(55, 350, 455);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_v_out, frameMat);
-    mesh.position.x = posX - 80;
+    mesh.position.x = posX - 40;
     mesh.position.y = posY;
     mesh.position.z = posZ + 300;
     mesh.receiveShadow = true;
@@ -3413,7 +3413,7 @@ function addPicturesWallVer19(positionX) { //max pic: 3
     frame_ver = new THREE.BoxGeometry(5, 350, 455);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_ver, frameMaterial);
-    mesh.position.x = posX - 120;
+    mesh.position.x = posX - 70;
     mesh.position.y = posY;
     mesh.position.z = posZ + 300;
     mesh.receiveShadow = true;
@@ -3439,7 +3439,7 @@ function addPicturesWallVer20(positionX) { //max pic: 3
         posY = 550,
         posZ = 500;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh2.jpg');
+    const frameTexture = loader.load('../assets/images/tranh17.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -3454,7 +3454,7 @@ function addPicturesWallVer20(positionX) { //max pic: 3
     frame_v_out = new THREE.BoxGeometry(55, 655, 350);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_v_out, frameMat);
-    mesh.position.x = posX - 80;
+    mesh.position.x = posX - 40;
     mesh.position.y = posY;
     mesh.position.z = posZ + -300;
     mesh.receiveShadow = true;
@@ -3465,7 +3465,7 @@ function addPicturesWallVer20(positionX) { //max pic: 3
     frame_ver = new THREE.BoxGeometry(5, 655, 350);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_ver, frameMaterial);
-    mesh.position.x = posX - 120;
+    mesh.position.x = posX - 70;
     mesh.position.y = posY;
     mesh.position.z = posZ - 300;
     mesh.receiveShadow = true;
@@ -3492,7 +3492,7 @@ function addPicturesWallVer21(positionX) { //max pic: 3
         posY = 550,
         posZ = 500;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh24.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -3507,7 +3507,7 @@ function addPicturesWallVer21(positionX) { //max pic: 3
     frame_v_out = new THREE.BoxGeometry(55, 550, 655);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_v_out, frameMat);
-    mesh.position.x = posX - 80;
+    mesh.position.x = posX - 40;
     mesh.position.y = posY;
     mesh.position.z = posZ - 1000;
     mesh.receiveShadow = true;
@@ -3518,7 +3518,7 @@ function addPicturesWallVer21(positionX) { //max pic: 3
     frame_ver = new THREE.BoxGeometry(5, 550, 655);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_ver, frameMaterial);
-    mesh.position.x = posX - 120;
+    mesh.position.x = posX - 70;
     mesh.position.y = posY;
     mesh.position.z = posZ - 1000;
     mesh.receiveShadow = true;
@@ -3547,7 +3547,7 @@ function addPicturesWallVer22(positionX) { //max pic: 3
         posY = 550,
         posZ = -1250;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh60.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -3599,7 +3599,7 @@ function addPicturesWallVer23(positionX) { //max pic: 3
         posY = 550,
         posZ = -1250;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh59.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -3611,10 +3611,10 @@ function addPicturesWallVer23(positionX) { //max pic: 3
     // for (var i = 1; i <= 6; i++) {
 
     // frame
-    frame_v_out = new THREE.BoxGeometry(555, 455, 55);
+    frame_v_out = new THREE.BoxGeometry(505, 655, 55);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_v_out, frameMat);
-    mesh.position.x = posX;
+    mesh.position.x = posX - 100;
     mesh.position.y = posY;
     mesh.position.z = posZ - 40;
     mesh.receiveShadow = true;
@@ -3622,10 +3622,10 @@ function addPicturesWallVer23(positionX) { //max pic: 3
 
     scene.add(mesh);
     // image show
-    frame_ver = new THREE.BoxGeometry(550, 450, 5);
+    frame_ver = new THREE.BoxGeometry(500, 650, 5);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_ver, frameMaterial);
-    mesh.position.x = posX;
+    mesh.position.x = posX - 100;
     mesh.position.y = posY;
     mesh.position.z = posZ - 70;
     mesh.receiveShadow = true;
@@ -3651,7 +3651,7 @@ function addPicturesWallVer24(positionX) { //max pic: 3
         posY = 550,
         posZ = -1250;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh58.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -3663,10 +3663,10 @@ function addPicturesWallVer24(positionX) { //max pic: 3
     // for (var i = 1; i <= 6; i++) {
 
     // frame
-    frame_v_out = new THREE.BoxGeometry(555, 455, 55);
+    frame_v_out = new THREE.BoxGeometry(655, 455, 55);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_v_out, frameMat);
-    mesh.position.x = posX + 1000;
+    mesh.position.x = posX + 800;
     mesh.position.y = posY;
     mesh.position.z = posZ - 40;
     mesh.receiveShadow = true;
@@ -3674,10 +3674,10 @@ function addPicturesWallVer24(positionX) { //max pic: 3
 
     scene.add(mesh);
     // image show
-    frame_ver = new THREE.BoxGeometry(550, 450, 5);
+    frame_ver = new THREE.BoxGeometry(650, 450, 5);
     //console.log(poleMat);
     mesh = new THREE.Mesh(frame_ver, frameMaterial);
-    mesh.position.x = posX + 1000;
+    mesh.position.x = posX + 800;
     mesh.position.y = posY;
     mesh.position.z = posZ - 70;
     mesh.receiveShadow = true;
@@ -3706,7 +3706,7 @@ function addPicturesWallVer25(positionX) { //max pic: 3
         posY = 550,
         posZ = 0;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh41.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -3758,7 +3758,7 @@ function addPicturesWallVer26(positionX) { //max pic: 3
         posY = 650,
         posZ = 0;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh26.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -3810,7 +3810,7 @@ function addPicturesWallVer27(positionX) { //max pic: 3
         posY = 450,
         posZ = 0;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/tranh1.jpg');
+    const frameTexture = loader.load('../assets/images/tranh40.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
@@ -3862,7 +3862,7 @@ function addPicturesWallVer28(positionX) { //max pic: 3
         posY = 550,
         posZ = 0;
     const loader = new THREE.TextureLoader();
-    const frameTexture = loader.load('../assets/images/puppy2.jpg');
+    const frameTexture = loader.load('../assets/images/tranh27.jpg');
     frameTexture.wrapS = frameTexture.wrapT = THREE.RepeatWrapping;
     frameTexture.repeat.set(1, 1);
     frameTexture.anisotropy = 16;
