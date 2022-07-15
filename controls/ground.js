@@ -393,22 +393,22 @@ function init() {
 
     //wall custom new THREE.BoxGeometry( width x, height y, thickness z )
 
-    const wallmaxleft = new THREE.BoxGeometry(70, 5000, 12000);
+    const wallmaxleft = new THREE.BoxGeometry(70, 5000, 11000);
     mesh = new THREE.Mesh(wallmaxleft, poleMat);
     mesh.position.y = -250;
     mesh.position.x = -5000;
-    mesh.position.z = 0;
+    mesh.position.z = 500;
     mesh.receiveShadow = true;
     mesh.castShadow = true;
 
     scene.add(mesh);
 
 
-    const wallmaxright = new THREE.BoxGeometry(70, 5000, 12000);
+    const wallmaxright = new THREE.BoxGeometry(70, 5000, 11000);
     mesh = new THREE.Mesh(wallmaxright, poleMat);
     mesh.position.y = -250;
     mesh.position.x = 5000;
-    mesh.position.z = 0;
+    mesh.position.z = 500;
     mesh.receiveShadow = true;
     mesh.castShadow = true;
 
